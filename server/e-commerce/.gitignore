@@ -33,4 +33,6 @@ build/
 .vscode/
 
 ### Custom ###
+admin.properties
 datasource.properties
+src/main/resources/rsa
