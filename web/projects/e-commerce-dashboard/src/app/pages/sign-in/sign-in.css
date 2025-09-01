@@ -1,0 +1,21 @@
+.sign-in {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-form-field {
+  width: 100%;
+  /* add some space between error message and next component */
+  padding-top: 4px;
+  padding-bottom: 4px;
+}

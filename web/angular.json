@@ -25,6 +25,7 @@
               }
             ],
             "styles": [
+              "projects/e-commerce-dashboard/src/custom-theme.scss",
               "projects/e-commerce-dashboard/src/styles.css"
             ]
           },
@@ -47,7 +48,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/e-commerce-dashboard/src/environments/environment.ts",
+                  "with": "projects/e-commerce-dashboard/src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -83,6 +90,36 @@
             ],
             "styles": [
               "projects/e-commerce-dashboard/src/styles.css"
+            ]
+          }
+        }
+      }
+    },
+    "e-commerce-auth": {
+      "projectType": "library",
+      "root": "projects/e-commerce-auth",
+      "sourceRoot": "projects/e-commerce-auth/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/e-commerce-auth/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/e-commerce-auth/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/e-commerce-auth/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
             ]
           }
         }
