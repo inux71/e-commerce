@@ -9,7 +9,7 @@ import { Config } from '../config';
   providedIn: 'root',
 })
 export class AuthService {
-  private token: string | null = null;
+  private accessTokenKey = 'ACCESS_TOKEN';
 
   constructor(
     private httpClient: HttpClient,
@@ -17,11 +17,15 @@ export class AuthService {
   ) {}
 
   getToken(): string | null {
-    return this.token;
+    return localStorage.getItem(this.accessTokenKey);
   }
 
   setToken(token: string) {
-    this.token = token;
+    localStorage.setItem(this.accessTokenKey, token);
+  }
+
+  isSignedIn(): boolean {
+    return this.getToken() != null;
   }
 
   signIn(email: string, password: string): Observable<Token> {
@@ -32,6 +36,6 @@ export class AuthService {
   }
 
   signOut() {
-    this.token = null;
+    localStorage.removeItem(this.accessTokenKey);
   }
 }

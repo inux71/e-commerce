@@ -35,6 +35,7 @@ export const appConfig: ApplicationConfig = {
       provide: AUTH_CONFIG,
       useValue: {
         signInUrl: `${environment.baseUrl}/${environment.endpoints.auth.login}`,
+        signInPath: '/sign-in',
       },
     },
   ],
