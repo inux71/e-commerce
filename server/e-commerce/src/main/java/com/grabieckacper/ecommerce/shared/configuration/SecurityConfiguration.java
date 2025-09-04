@@ -1,6 +1,5 @@
-package com.grabieckacper.ecommerce.dashboard.configuration;
+package com.grabieckacper.ecommerce.shared.configuration;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -9,51 +8,29 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
-import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-@Configuration(value = "dashboard-security-configuration")
+@Configuration(value = "shared-security-configuration")
 @EnableWebSecurity
 public class SecurityConfiguration {
-    private final JwtDecoder jwtDecoder;
-
-    public SecurityConfiguration(@Qualifier("dashboard-jwt-decoder") JwtDecoder jwtDecoder) {
-        this.jwtDecoder = jwtDecoder;
-    }
-
-    @Bean(name = "dashboard-security-filter-chain")
-    @Order(1)
+    @Bean(name = "shared-security-filter-chain")
+    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .securityMatcher("/api/dashboard/**")
+                .securityMatcher("/api/**")
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer ->
                         httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource())
                 )
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/api/dashboard/auth/login").permitAll()
-                                .anyRequest().authenticated()
+                        authorizationManagerRequestMatcherRegistry.anyRequest().permitAll()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .oauth2ResourceServer(
-                        httpSecurityOAuth2ResourceServerConfigurer ->
-                                httpSecurityOAuth2ResourceServerConfigurer.jwt(jwtConfigurer ->
-                                        jwtConfigurer.decoder(jwtDecoder)
-                                )
-                )
-                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
-                        httpSecurityExceptionHandlingConfigurer
-                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
                 .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
                         .frameOptions(Customizer.withDefaults())
@@ -61,10 +38,10 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    @Bean(name = "dashboard-cors-configuration-source")
+    @Bean(name = "shared-cors-configuration-source")
     UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200"));
+        corsConfiguration.setAllowedOrigins(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
