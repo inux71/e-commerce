@@ -1,8 +1,6 @@
 package com.grabieckacper.ecommerce.shared.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +12,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Product")
@@ -48,6 +48,14 @@ public class Product extends BaseEntity {
     @NotNull
     @LastModifiedBy
     private Long updatedBy; // Employee's id
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+            name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id")
+    )
+    private List<Category> categories = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -87,5 +95,9 @@ public class Product extends BaseEntity {
 
     public Long getUpdatedBy() {
         return updatedBy;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
     }
 }
