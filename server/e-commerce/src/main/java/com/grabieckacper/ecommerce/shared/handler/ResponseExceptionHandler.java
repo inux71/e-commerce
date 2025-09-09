@@ -1,5 +1,6 @@
 package com.grabieckacper.ecommerce.shared.handler;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.FileNotFoundException;
+
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     // 404 - Not found
-    @ExceptionHandler(value = {UsernameNotFoundException.class})
+    @ExceptionHandler(value = { EntityNotFoundException.class, FileNotFoundException.class, UsernameNotFoundException.class })
     public ResponseEntity<Object> handle404NotFound(RuntimeException ex, WebRequest webRequest) {
         return handleExceptionInternal(ex, ex.getLocalizedMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, webRequest);
     }
