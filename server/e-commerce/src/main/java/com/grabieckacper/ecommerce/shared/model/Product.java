@@ -57,6 +57,14 @@ public class Product extends BaseEntity {
     )
     private List<Category> categories = new ArrayList<>();
 
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+            name = "product_file",
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id")
+    )
+    private List<File> files = new ArrayList<>();
+
     public String getName() {
         return name;
     }
@@ -99,5 +107,9 @@ public class Product extends BaseEntity {
 
     public List<Category> getCategories() {
         return categories;
+    }
+
+    public List<File> getFiles() {
+        return files;
     }
 }
