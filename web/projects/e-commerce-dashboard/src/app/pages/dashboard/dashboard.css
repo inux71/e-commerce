@@ -1,13 +1,11 @@
 .dashboard {
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: center;
   height: 100vh;
 }
 
 mat-toolbar {
-  z-index: 2;
+  background-color: var(--mat-sys-primary-container);
 }
 
 .spacer {
@@ -15,10 +13,14 @@ mat-toolbar {
 }
 
 mat-sidenav-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #eee;
+  height: 100vh;
+}
+
+mat-sidenav {
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0;
+}
+
+a {
+  text-decoration: none;
 }
