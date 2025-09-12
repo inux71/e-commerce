@@ -1,0 +1,15 @@
+<div class="add-category">
+  <h2>Add category</h2>
+  <form [formGroup]="addCategoryForm" (ngSubmit)="addCategory()">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="name" formControlName="name" required />
+      @if (addCategoryForm.controls.name.invalid) {
+      <mat-error>{{ nameErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <button matButton="filled" [disabled]="addCategoryForm.invalid">
+      Add category
+    </button>
+  </form>
+</div>

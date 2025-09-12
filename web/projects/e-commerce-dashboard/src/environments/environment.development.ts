@@ -1,9 +1,12 @@
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:8080/api/dashboard',
+  baseUrl: 'http://localhost:8080/api',
   endpoints: {
     auth: {
-      login: 'auth/login',
+      login: 'dashboard/auth/login',
+    },
+    category: {
+      create: 'dashboard/category',
     },
   },
 };

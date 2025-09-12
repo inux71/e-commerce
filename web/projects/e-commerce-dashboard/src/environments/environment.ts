@@ -5,5 +5,8 @@ export const environment = {
     auth: {
       login: '',
     },
+    category: {
+      create: '',
+    },
   },
 };

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { AddCategory } from '../add-category/add-category';
 
 @Component({
   selector: 'app-categories',
-  imports: [MatIconModule, MatTabsModule],
+  imports: [AddCategory, MatIconModule, MatTabsModule],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })

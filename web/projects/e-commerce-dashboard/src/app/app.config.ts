@@ -7,9 +7,13 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 
-import { AUTH_CONFIG } from 'e-commerce-auth';
+import { AUTH_CONFIG, authInterceptor } from 'e-commerce-auth';
 import { environment } from '../environments/environment';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
@@ -30,7 +34,7 @@ export const appConfig: ApplicationConfig = {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 3000 },
     },
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     {
       provide: AUTH_CONFIG,
       useValue: {
