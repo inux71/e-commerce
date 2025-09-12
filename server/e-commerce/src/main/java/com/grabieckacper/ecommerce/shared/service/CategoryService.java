@@ -2,6 +2,7 @@ package com.grabieckacper.ecommerce.shared.service;
 
 import com.grabieckacper.ecommerce.shared.model.Category;
 import com.grabieckacper.ecommerce.shared.repository.CategoryRepository;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,5 +17,19 @@ public class CategoryService {
 
     public List<Category> getCategories() {
         return categoryRepository.findAll();
+    }
+
+    public void saveCategory(String name) {
+        String preparedName = name.toLowerCase().trim();
+
+        categoryRepository.findByName(preparedName)
+                .ifPresent(_ -> {
+                    throw new EntityExistsException("Category with name " + name + " already exists");
+                });
+
+        Category category = new Category();
+        category.setName(preparedName);
+
+        categoryRepository.save(category);
     }
 }

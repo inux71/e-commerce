@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
+@RestController(value = "shared-category-controller")
 @RequestMapping("/api/category")
 public class CategoryController {
     private final CategoryService categoryService;
