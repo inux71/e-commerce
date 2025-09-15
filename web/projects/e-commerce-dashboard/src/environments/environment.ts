@@ -6,6 +6,7 @@ export const environment = {
       login: '',
     },
     category: {
+      categories: '',
       create: '',
     },
   },

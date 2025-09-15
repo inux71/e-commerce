@@ -6,6 +6,7 @@ export const environment = {
       login: 'dashboard/auth/login',
     },
     category: {
+      categories: 'category',
       create: 'dashboard/category',
     },
   },

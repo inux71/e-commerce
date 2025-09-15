@@ -7,6 +7,8 @@ import { Products } from './pages/products/products';
 import { Categories } from './pages/categories/categories';
 import { Settings } from './pages/settings/settings';
 import { Account } from './pages/account/account';
+import { AddCategory } from './pages/add-category/add-category';
+import { CategoryList } from './pages/category-list/category-list';
 
 export const routes: Routes = [
   {
@@ -21,14 +23,26 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
-        path: 'products',
+        path: 'product',
         component: Products,
         title: 'Products',
       },
       {
-        path: 'categories',
+        path: 'category',
         component: Categories,
         title: 'Categories',
+        children: [
+          {
+            path: '',
+            component: CategoryList,
+            title: 'Categories',
+          },
+          {
+            path: 'add',
+            component: AddCategory,
+            title: 'Add category',
+          },
+        ],
       },
       {
         path: 'account',
