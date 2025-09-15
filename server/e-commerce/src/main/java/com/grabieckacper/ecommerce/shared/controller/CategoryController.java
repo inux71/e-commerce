@@ -23,7 +23,12 @@ public class CategoryController {
     public ResponseEntity<Iterable<CategoryResponse>> getCategories() {
         List<Category> categories = categoryService.getCategories();
         List<CategoryResponse> categoryResponse = categories.stream()
-                .map(category -> new CategoryResponse(category.getName(), category.getProducts()))
+                .map(category -> new CategoryResponse(
+                        category.getId(),
+                        category.getName(),
+                        category.getProducts()
+                                .size()
+                ))
                 .toList();
 
         return ResponseEntity.ok(categoryResponse);
