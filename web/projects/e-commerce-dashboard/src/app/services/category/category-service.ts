@@ -24,4 +24,14 @@ export class CategoryService {
       }
     );
   }
+
+  updateCategory(id: number, name: string): Observable<void> {
+    return this.httpClient.patch<void>(
+      `${environment.baseUrl}/${environment.endpoints.category.update}`,
+      {
+        id: id,
+        name: name.toLowerCase().trim(),
+      }
+    );
+  }
 }

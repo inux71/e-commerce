@@ -17,7 +17,12 @@
     }
   </mat-form-field>
 
-  <table mat-table [dataSource]="categoriesDataSource" matSort>
+  <table
+    mat-table
+    [dataSource]="categoriesDataSource"
+    multiTemplateDataRows
+    matSort
+  >
     <!-- id column -->
     <ng-container matColumnDef="id">
       <th
@@ -59,7 +64,76 @@
       </td>
     </ng-container>
 
+    <!-- expand column -->
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+      <td mat-cell *matCellDef="let category">
+        <button
+          matIconButton
+          (click)="toggle(category); $event.stopPropagation()"
+          [class.toggle-button-expanded]="isExpanded(category)"
+        >
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- expanded column -->
+    <ng-container matColumnDef="expanded">
+      <td
+        mat-cell
+        [attr.colspan]="displayedColumns.length"
+        *matCellDef="let category"
+      >
+        <div
+          class="category-wrapper"
+          [class.category-wrapper-expanded]="isExpanded(category)"
+        >
+          <div class="expanded-category">
+            <form
+              [formGroup]="updateCategoryForm"
+              (ngSubmit)="updateCategory(category)"
+            >
+              <mat-form-field>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="name"
+                  formControlName="name"
+                  required
+                />
+                @if (updateCategoryForm.controls.name.invalid) {
+                <mat-error>{{ nameErrorMessage() }}</mat-error>
+                }
+              </mat-form-field>
+              <button
+                type="submit"
+                matButton="tonal"
+                [disabled]="updateCategoryForm.invalid"
+                class="update-button"
+              >
+                Update
+              </button>
+            </form>
+
+            <button type="button" matIconButton (click)="deleteCategory()">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let rowData; columns: displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let category; columns: displayedColumns;"
+      class="category-row"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let rowData; columns: ['expanded'];"
+      class="expanded-row"
+    ></tr>
   </table>
 </div>

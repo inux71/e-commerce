@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { merge } from 'rxjs';
 import { CategoryService } from '../../services/category/category-service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-category',
@@ -34,6 +35,7 @@ export class AddCategory {
 
   constructor(
     private categoryService: CategoryService,
+    private router: Router,
     private snackBar: MatSnackBar
   ) {
     merge(
@@ -70,6 +72,9 @@ export class AddCategory {
       },
       error: (error: HttpErrorResponse) => {
         switch (error.status) {
+          case 401:
+            this.router.navigate(['/sign-in'], { replaceUrl: true });
+            break;
           case 409:
             this.errorMessage.set(`Category with name ${name} already exists`);
             break;

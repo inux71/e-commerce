@@ -8,6 +8,7 @@ export const environment = {
     category: {
       categories: 'category',
       create: 'dashboard/category',
+      update: 'dashboard/category',
     },
   },
 };
