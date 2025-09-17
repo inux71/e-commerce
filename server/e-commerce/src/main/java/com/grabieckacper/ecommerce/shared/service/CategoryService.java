@@ -3,6 +3,7 @@ package com.grabieckacper.ecommerce.shared.service;
 import com.grabieckacper.ecommerce.shared.model.Category;
 import com.grabieckacper.ecommerce.shared.repository.CategoryRepository;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +30,15 @@ public class CategoryService {
 
         Category category = new Category();
         category.setName(preparedName);
+
+        categoryRepository.save(category);
+    }
+
+    public void updateCategory(Long id, String name) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " not found"));
+
+        category.setName(name.toLowerCase().trim());
 
         categoryRepository.save(category);
     }
