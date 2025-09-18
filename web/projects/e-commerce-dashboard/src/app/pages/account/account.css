@@ -1,0 +1,10 @@
+.account {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 16px;
+}
+
+button {
+  margin-left: 16px;
+}

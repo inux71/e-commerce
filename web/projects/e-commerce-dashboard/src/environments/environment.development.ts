@@ -10,5 +10,8 @@ export const environment = {
       create: 'dashboard/category',
       update: 'dashboard/category',
     },
+    employee: {
+      changePassword: 'dashboard/employee/change-password',
+    },
   },
 };

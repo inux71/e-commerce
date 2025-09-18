@@ -1,1 +1,32 @@
-<p>account works!</p>
+<div class="account">
+  <h2>Account</h2>
+
+  <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+    <mat-form-field>
+      <mat-icon matPrefix>password</mat-icon>
+      <input
+        [type]="passwordHidden() ? 'password' : 'text'"
+        matInput
+        placeholder="password"
+        formControlName="password"
+        required
+      />
+      <button
+        type="button"
+        matIconButton
+        matSuffix
+        (click)="changePasswordVisibility($event)"
+      >
+        <mat-icon
+          >{{ passwordHidden() ? 'visibility_off' : 'visibility' }}</mat-icon
+        >
+      </button>
+      @if (changePasswordForm.controls.password.invalid) {
+      <mat-error>{{ passwordErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <button matButton="filled" [disabled]="changePasswordForm.invalid">
+      Change
+    </button>
+  </form>
+</div>
