@@ -1,0 +1,79 @@
+<div class="add-product">
+  <h2>Add product</h2>
+
+  <form [formGroup]="addProductForm" (ngSubmit)="addProduct()">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="name" formControlName="name" required />
+      @if (addProductForm.controls.name.invalid) {
+      <mat-error>{{ nameErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="description"
+        cdkTextareaAutosize="false"
+        rows="4"
+      ></textarea>
+      <mat-hint align="end"
+        >{{ addProductForm.controls.description.value?.length }}
+        characters</mat-hint
+      >
+      @if (addProductForm.controls.description.invalid) {
+      <mat-error>{{ descriptionErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Price</mat-label>
+      <input
+        class="price-input"
+        type="number"
+        min="0.01"
+        max="999999.99"
+        step="0.01"
+        matInput
+        placeholder="0.00"
+        formControlName="price"
+        required
+      />
+      @if (addProductForm.controls.price.invalid) {
+      <mat-error>{{ priceErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Categories</mat-label>
+      <mat-select
+        formControlName="categories"
+        placeholder="categories"
+        multiple
+      >
+        <mat-select-trigger>
+          <mat-chip-listbox>
+            @for (category of addProductForm.controls.categories.value; track
+            category.id) {
+            <mat-chip (removed)="removeCategory(category)"
+              >{{ category.name }}
+              <button type="button" matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            }
+          </mat-chip-listbox>
+        </mat-select-trigger>
+        @for (category of categories; track category) {
+        <mat-option [value]="category">{{ category.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button
+      type="submit"
+      matButton="filled"
+      [disabled]="addProductForm.invalid"
+    >
+      Add category
+    </button>
+  </form>
+</div>

@@ -1,0 +1,20 @@
+.add-product {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  padding-bottom: 12px;
+}
+
+.price-input {
+  text-align: right;
+}

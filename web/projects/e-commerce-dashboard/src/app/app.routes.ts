@@ -9,6 +9,8 @@ import { Settings } from './pages/settings/settings';
 import { Account } from './pages/account/account';
 import { AddCategory } from './pages/add-category/add-category';
 import { CategoryList } from './pages/category-list/category-list';
+import { ProductList } from './pages/product-list/product-list';
+import { AddProduct } from './pages/add-product/add-product';
 
 export const routes: Routes = [
   {
@@ -26,6 +28,18 @@ export const routes: Routes = [
         path: 'product',
         component: Products,
         title: 'Products',
+        children: [
+          {
+            path: '',
+            component: ProductList,
+            title: 'Products',
+          },
+          {
+            path: 'add',
+            component: AddProduct,
+            title: 'Add product',
+          },
+        ],
       },
       {
         path: 'category',

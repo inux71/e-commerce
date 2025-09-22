@@ -13,5 +13,8 @@ export const environment = {
     employee: {
       changePassword: '',
     },
+    product: {
+      create: '',
+    },
   },
 };
