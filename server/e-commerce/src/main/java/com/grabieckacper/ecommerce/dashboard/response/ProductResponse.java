@@ -10,8 +10,7 @@ public record ProductResponse(
         BigDecimal price,
         Date createdAt,
         Date updatedAt,
-        Long createdBy, // Employee's id
-        Long updatedBy, // Employee's id
-        List<String> categories,
-        List<Long> files
+        String createdBy, // Employee's email
+        String updatedBy, // Employee's email
+        List<String> categories
 ) {}

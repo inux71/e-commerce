@@ -12,9 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "Product")
@@ -43,27 +41,19 @@ public class Product extends BaseEntity {
 
     @NotNull
     @CreatedBy
-    private Long createdBy; // Employee's id
+    private String createdBy; // Employee's email
 
     @NotNull
     @LastModifiedBy
-    private Long updatedBy; // Employee's id
+    private String updatedBy; // Employee's email
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany
     @JoinTable(
             name = "product_category",
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id")
     )
-    private List<Category> categories = new ArrayList<>();
-
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(
-            name = "product_file",
-            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id")
-    )
-    private List<File> files = new ArrayList<>();
+    private Set<Category> categories = new HashSet<>();
 
     public String getName() {
         return name;
@@ -97,19 +87,19 @@ public class Product extends BaseEntity {
         return updatedAt;
     }
 
-    public Long getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    public Long getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public List<File> getFiles() {
-        return files;
+    public void addCategory(Category category) {
+        categories.add(category);
     }
 }

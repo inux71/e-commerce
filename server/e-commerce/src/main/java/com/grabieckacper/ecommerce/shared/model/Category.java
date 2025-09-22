@@ -6,8 +6,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Category")
@@ -17,7 +17,7 @@ public class Category extends BaseEntity {
     private String name;
 
     @ManyToMany(mappedBy = "categories")
-    private List<Product> products =  new ArrayList<>();
+    private Set<Product> products =  new HashSet<>();
 
     public String getName() {
         return name;
@@ -27,7 +27,11 @@ public class Category extends BaseEntity {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
     }
 }
