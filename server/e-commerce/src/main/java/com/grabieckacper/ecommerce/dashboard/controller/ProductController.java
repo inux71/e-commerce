@@ -24,6 +24,7 @@ public class ProductController {
     public ResponseEntity<Page<ProductResponse>> getAll(Pageable pageable) {
         Page<Product> products = productService.getAll(pageable);
         Page<ProductResponse> response = products.map(product -> new ProductResponse(
+                product.getId(),
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
