@@ -15,6 +15,7 @@ export const environment = {
     },
     product: {
       create: '',
+      products: '',
     },
   },
 };
