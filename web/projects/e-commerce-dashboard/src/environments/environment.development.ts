@@ -16,6 +16,7 @@ export const environment = {
     product: {
       create: 'dashboard/product',
       products: 'dashboard/product',
+      update: 'dashboard/product',
     },
   },
 };

@@ -55,4 +55,25 @@ export class ProductService {
       }
     );
   }
+
+  updateProduct(
+    id: number,
+    name: string,
+    description: string,
+    price: number,
+    categories: Category[]
+  ): Observable<void> {
+    const categoryIds: number[] = categories.map((category) => category.id);
+
+    return this.httpClient.patch<void>(
+      `${environment.baseUrl}/${environment.endpoints.product.update}`,
+      {
+        id: id,
+        name: name,
+        description: description,
+        price: price,
+        categoryIds: categoryIds,
+      }
+    );
+  }
 }

@@ -37,3 +37,53 @@ tr.expanded-row {
 .update-button {
   margin-left: 20px;
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+mat-form-field {
+  padding-bottom: 12px;
+}
+
+.price-input {
+  text-align: right;
+}
+
+.disabled-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.disabled {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.disabled-left {
+  margin-right: 8px;
+}
+
+.disabled-right {
+  margin-left: 8px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.button-container .update-button {
+  flex: 1;
+}
+
+.button-container .delete-button {
+  flex: 0 0 auto;
+}

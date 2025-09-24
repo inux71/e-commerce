@@ -7,5 +7,5 @@ export interface Product {
   updatedAt: Date;
   createdBy: string;
   updatedBy: string;
-  categories: string[];
+  categoryNames: string[];
 }
