@@ -1,6 +1,7 @@
 package com.grabieckacper.ecommerce.dashboard.controller;
 
 import com.grabieckacper.ecommerce.dashboard.request.CreateProductRequest;
+import com.grabieckacper.ecommerce.dashboard.request.UpdateProductRequest;
 import com.grabieckacper.ecommerce.dashboard.response.ProductResponse;
 import com.grabieckacper.ecommerce.shared.model.Category;
 import com.grabieckacper.ecommerce.shared.model.Product;
@@ -48,6 +49,19 @@ public class ProductController {
                 createProductRequest.description(),
                 createProductRequest.price(),
                 createProductRequest.categoryIds()
+        );
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<Void> updateProduct(@Valid @RequestBody UpdateProductRequest updateProductRequest) {
+        productService.update(
+                updateProductRequest.id(),
+                updateProductRequest.name(),
+                updateProductRequest.description(),
+                updateProductRequest.price(),
+                updateProductRequest.categoryIds()
         );
 
         return ResponseEntity.noContent().build();

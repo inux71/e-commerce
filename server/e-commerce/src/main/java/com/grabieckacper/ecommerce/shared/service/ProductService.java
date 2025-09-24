@@ -23,17 +23,12 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Page<Product> getAll(Pageable pageable) {
-        return productRepository.findAll(pageable);
-    }
-
-    @Transactional
-    public void save(String name, String description, BigDecimal price, List<Long> categoryIds) {
-        Product product = new Product();
+    private void insert(Product product, String name, String description, BigDecimal price, List<Long> categoryIds) {
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
 
+        product.getCategories().clear();
         categoryIds.forEach(id -> {
             Category category = categoryRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " not found"));
@@ -43,5 +38,22 @@ public class ProductService {
         });
 
         productRepository.save(product);
+    }
+
+    public Page<Product> getAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public void save(String name, String description, BigDecimal price, List<Long> categoryIds) {
+        insert(new Product(), name, description, price, categoryIds);
+    }
+
+    @Transactional
+    public void update(Long id, String name, String description, BigDecimal price, List<Long> categoryIds) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+
+        insert(product, name, description, price, categoryIds);
     }
 }

@@ -13,5 +13,5 @@ public record ProductResponse(
         Date updatedAt,
         String createdBy, // Employee's email
         String updatedBy, // Employee's email
-        List<String> categories
+        List<String> categoryNames
 ) {}
