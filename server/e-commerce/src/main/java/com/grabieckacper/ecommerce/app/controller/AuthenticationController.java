@@ -1,6 +1,6 @@
-package com.grabieckacper.ecommerce.dashboard.controller;
+package com.grabieckacper.ecommerce.app.controller;
 
-import com.grabieckacper.ecommerce.dashboard.service.AuthenticationService;
+import com.grabieckacper.ecommerce.app.service.AuthenticationService;
 import com.grabieckacper.ecommerce.shared.request.LoginRequest;
 import com.grabieckacper.ecommerce.shared.response.LoginResponse;
 import jakarta.validation.Valid;
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController(value = "dashboard-authentication-controller")
-@RequestMapping("/api/dashboard/auth")
+@RestController(value = "app-authentication-controller")
+@RequestMapping("/api/app/auth")
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final AuthenticationService authenticationService;
 
     public AuthenticationController(
-            @Qualifier("dashboard-authentication-manager") AuthenticationManager authenticationManager,
-            @Qualifier("dashboard-authentication-service") AuthenticationService authenticationService
+            @Qualifier("app-authentication-manager") AuthenticationManager authenticationManager,
+            @Qualifier("app-authentication-service") AuthenticationService authenticationService
     ) {
         this.authenticationManager = authenticationManager;
         this.authenticationService = authenticationService;

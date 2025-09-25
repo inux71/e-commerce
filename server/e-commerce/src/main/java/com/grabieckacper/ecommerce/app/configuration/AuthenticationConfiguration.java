@@ -1,6 +1,6 @@
-package com.grabieckacper.ecommerce.dashboard.configuration;
+package com.grabieckacper.ecommerce.app.configuration;
 
-import com.grabieckacper.ecommerce.dashboard.service.EmployeeService;
+import com.grabieckacper.ecommerce.app.service.CustomerService;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -9,6 +9,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,37 +19,38 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
-@Configuration(value = "dashboard-authentication-configuration")
+@Configuration(value = "app-authentication-configuration")
 public class AuthenticationConfiguration {
-    private final EmployeeService employeeService;
+    private final CustomerService customerService;
     private final PasswordEncoder passwordEncoder;
     private final RSAKeyProperties rsaKeyProperties;
 
     public AuthenticationConfiguration(
-            EmployeeService employeeService,
+            CustomerService customerService,
             PasswordEncoder passwordEncoder,
             RSAKeyProperties rsaKeyProperties
     ) {
-        this.employeeService = employeeService;
+        this.customerService = customerService;
         this.passwordEncoder = passwordEncoder;
         this.rsaKeyProperties = rsaKeyProperties;
     }
 
-    @Bean(name = "dashboard-authentication-manager")
+    @Bean(name = "app-authentication-manager")
+    @Primary
     public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(employeeService);
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(customerService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 
         return new ProviderManager(daoAuthenticationProvider);
     }
 
-    @Bean(name = "dashboard-jwt-decoder")
+    @Bean(name = "app-jwt-decoder")
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeyProperties.publicKey())
                 .build();
     }
 
-    @Bean(name = "dashboard-jwt-encoder")
+    @Bean(name = "app-jwt-encoder")
     public JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(rsaKeyProperties.publicKey())
                 .privateKey(rsaKeyProperties.privateKey())
