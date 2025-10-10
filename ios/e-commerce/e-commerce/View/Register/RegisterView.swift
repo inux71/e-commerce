@@ -24,12 +24,36 @@ struct RegisterView: View {
                 ) {
                     Text("First name")
                 }
+                .onSubmit {
+                    viewModel.validateFirstName()
+                }
+                
+                if let firstNameErrorMessage = viewModel.firstNameErrorMessage {
+                    Text(firstNameErrorMessage)
+                        .foregroundStyle(.red)
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                }
                 
                 TextField(
                     text: $viewModel.lastName,
                     prompt: Text("last name")
                 ) {
                     Text("Last name")
+                }
+                .onSubmit {
+                    viewModel.validateLastName()
+                }
+                
+                if let lastNameErrorMessage = viewModel.lastNameErrorMessage {
+                    Text(lastNameErrorMessage)
+                        .foregroundStyle(.red)
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
                 }
                 
                 TextField(
@@ -38,6 +62,19 @@ struct RegisterView: View {
                 ) {
                     Text("Email")
                 }
+                .keyboardType(.emailAddress)
+                .onSubmit {
+                    viewModel.validateEmail()
+                }
+                
+                if let emailErrorMessage = viewModel.emailErrorMessage {
+                    Text(emailErrorMessage)
+                        .foregroundStyle(.red)
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                }
                 
                 SecureField(
                     text: $viewModel.password,
@@ -45,17 +82,30 @@ struct RegisterView: View {
                 ) {
                     Text("Password")
                 }
+                .onSubmit {
+                    viewModel.validatePassword()
+                }
+                
+                if let passwordErrorMessage = viewModel.passwordErrorMessage {
+                    Text(passwordErrorMessage)
+                        .foregroundStyle(.red)
+                        .frame(
+                            maxWidth: .infinity,
+                            alignment: .leading
+                        )
+                }
             }
             .textFieldStyle(.roundedBorder)
             
             Button(action: {
-                // viewModel.signUp
-                
-                coordinator.navigateBack()
+                Task {
+                    await viewModel.signUp()
+                }
             }) {
                 Text("Sign up")
             }
             .buttonStyle(.glass)
+            .disabled(viewModel.signUpButtonDisabled)
             
             HStack {
                 Text("Already have an acount?")
@@ -67,11 +117,31 @@ struct RegisterView: View {
                 }
             }
         }
+        .alert(
+            viewModel.errorMessage ?? "",
+            isPresented: $viewModel.isAlertPresented
+        ) {
+            Button("OK") {
+                viewModel.isAlertPresented = false
+                viewModel.errorMessage = nil
+            }
+        }
+        .onChange(of: viewModel.isAccountCreated) {
+            coordinator.navigateBack()
+        }
+        .overlay(alignment: .center) {
+            if viewModel.isLoading {
+                ProgressView()
+            }
+        }
+        .navigationTitle(Text("Sign up"))
         .padding(.horizontal)
     }
 }
 
 #Preview {
-    RegisterView()
-        .environmentObject(LoginCoordinator())
+    NavigationStack {
+        RegisterView()
+            .environmentObject(LoginCoordinator())
+    }
 }
