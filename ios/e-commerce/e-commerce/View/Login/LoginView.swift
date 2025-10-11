@@ -26,6 +26,19 @@ struct LoginView: View {
                     ) {
                         Text("Email")
                     }
+                    .keyboardType(.emailAddress)
+                    .onSubmit {
+                        viewModel.validateEmail()
+                    }
+                    
+                    if let emailErrorMessage = viewModel.emailErrorMessage {
+                        Text(emailErrorMessage)
+                            .foregroundStyle(.red)
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                    }
                     
                     SecureField(
                         text: $viewModel.password,
@@ -33,25 +46,34 @@ struct LoginView: View {
                     ) {
                         Text("Password")
                     }
+                    .onSubmit {
+                        viewModel.validatePassword()
+                    }
+                    
+                    if let passwordErrorMessage = viewModel.passwordErrorMessage {
+                        Text(passwordErrorMessage)
+                            .foregroundStyle(.red)
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                    }
                 }
                 .textFieldStyle(.roundedBorder)
                 
-                Button(action: {
-                    // viewModel.signIn
-                    
-                    homeCoordinator.dismiss()
-                }) {
-                    Text("Sign in")
+                Button("Sign in") {
+                    Task {
+                        await viewModel.signIn()
+                    }
                 }
                 .buttonStyle(.glass)
+                .disabled(viewModel.signInButtonDisabled)
                 
                 HStack {
                     Text("Don't have an acount?")
                     
-                    Button(action: {
+                    Button("Sign up") {
                         coordinator.navigate(to: .register)
-                    }) {
-                        Text("Sign up")
                     }
                 }
             }
@@ -62,6 +84,24 @@ struct LoginView: View {
                         .environmentObject(coordinator)
                 }
             }
+            .alert(
+                viewModel.errorMessage ?? "",
+                isPresented: $viewModel.isAlertPresented
+            ) {
+                Button("OK") {
+                    viewModel.isAlertPresented = false
+                    viewModel.errorMessage = nil
+                }
+            }
+            .onChange(of: viewModel.isSignedIn) {
+                homeCoordinator.dismiss()
+            }
+            .overlay(alignment: .center) {
+                if viewModel.isLoading {
+                    ProgressView()
+                }
+            }
+            .navigationTitle(Text("Sign in"))
             .padding(.horizontal)
         }
     }
