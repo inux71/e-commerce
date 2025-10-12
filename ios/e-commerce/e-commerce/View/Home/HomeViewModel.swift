@@ -9,5 +9,12 @@ import Combine
 import Foundation
 
 class HomeViewModel: ObservableObject {
+    private let keychainStorageManager: StorageManager = KeychainStorageManager.shared
     
+    func isSignedIn() -> Bool {
+        (try? keychainStorageManager.search(
+            for: KeychainKey.accessToken,
+            as: String.self
+        )) != nil
+    }
 }
