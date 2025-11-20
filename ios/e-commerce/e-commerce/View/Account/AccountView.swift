@@ -1,0 +1,48 @@
+//
+//  AccountView.swift
+//  e-commerce
+//
+//  Created by Kacper Grabiec on 20/11/2025.
+//
+
+import SwiftUI
+
+struct AccountView: View {
+    @EnvironmentObject private var homeCoordinator: HomeCoordinator
+    
+    @StateObject private var coordinator: AccountCoordinator = AccountCoordinator()
+    @StateObject private var viewModel: AccountViewModel = AccountViewModel()
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Button(
+                    "Sign out",
+                    systemImage: "rectangle.portrait.and.arrow.right",
+                    role: .destructive
+                ) {
+                    viewModel.signOut()
+                    homeCoordinator.show(item: .login)
+                }
+                .foregroundStyle(Color(.systemRed))
+            }
+            .navigationTitle("Account")
+            .alert(
+                viewModel.errorMessage ?? "",
+                isPresented: $viewModel.isAlertPresented
+            ) {
+                Button("OK") {
+                    viewModel.isAlertPresented = false
+                    viewModel.errorMessage = nil
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    NavigationStack {
+        AccountView()
+            .environmentObject(HomeCoordinator())
+    }
+}

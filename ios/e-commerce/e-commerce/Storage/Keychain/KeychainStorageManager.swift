@@ -53,4 +53,17 @@ class KeychainStorageManager: StorageManager {
             throw KeychainError.unhandledError(status: status)
         }
     }
+    
+    func delete(for key: String) throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key
+        ]
+        
+        let status: OSStatus = SecItemDelete(query as CFDictionary)
+        
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw KeychainError.unhandledError(status: status)
+        }
+    }
 }

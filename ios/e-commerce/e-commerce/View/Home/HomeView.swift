@@ -12,23 +12,30 @@ struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel = HomeViewModel()
     
     var body: some View {
-        NavigationStack {
-            Text("Home View") // add proper view here later
-                .onAppear {
-                    if !viewModel.isSignedIn() {
-                        coordinator.show(item: .login)
-                    }
-                }
-                .fullScreenCover(
-                    item: $coordinator.item,
-                    onDismiss: coordinator.onDismiss
-                ) { item in
-                    switch item {
-                    case .login:
-                        LoginView()
-                            .environmentObject(coordinator)
-                    }
-                }
+        TabView(selection: $viewModel.selectedTab) {
+            Tab(
+                HomeTabViewItem.account.rawValue,
+                systemImage: "person.crop.circle.fill",
+                value: .account
+            ) {
+                AccountView()
+                    .environmentObject(coordinator)
+            }
+        }
+        .onAppear {
+            if !viewModel.isSignedIn() {
+                coordinator.show(item: .login)
+            }
+        }
+        .fullScreenCover(
+            item: $coordinator.item,
+            onDismiss: coordinator.onDismiss
+        ) { item in
+            switch item {
+            case .login:
+                LoginView()
+                    .environmentObject(coordinator)
+            }
         }
     }
 }

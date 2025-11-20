@@ -8,7 +8,7 @@
 import Foundation
 
 class NetworkManager {
-    private let baseURL: URL = URL(string: "http://192.168.1.111:8080/api")!
+    private let baseURL: URL = URL(string: "http://192.168.0.93:8080/api")!
     private let urlSession: URLSession = .shared
     
     static let shared = NetworkManager()
