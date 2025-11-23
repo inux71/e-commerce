@@ -5,6 +5,8 @@ import com.grabieckacper.ecommerce.app.model.Profile;
 import com.grabieckacper.ecommerce.app.repository.CustomerRepository;
 import com.grabieckacper.ecommerce.app.repository.ProfileRepository;
 import jakarta.persistence.EntityExistsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +26,15 @@ public class CustomerService implements UserDetailsService {
         this.customerRepository = customerRepository;
         this.profileRepository = profileRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public Customer getMe() {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+
+        return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " not found"));
     }
 
     @Transactional
