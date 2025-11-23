@@ -43,13 +43,31 @@ class KeychainStorageManager: StorageManager {
         
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: key,
-            kSecValueData as String: data,
+            kSecAttrAccount as String: key
         ]
         
-        let status: OSStatus = SecItemAdd(query as CFDictionary, nil)
+        let attributesToUpdate: [String: Any] = [
+            kSecValueData as String: data
+        ]
         
-        guard status == errSecSuccess else {
+        let status: OSStatus = SecItemUpdate(query as CFDictionary, attributesToUpdate as CFDictionary)
+        
+        switch status {
+        case errSecSuccess:
+            return
+        case errSecItemNotFound:
+            let addQuery: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrAccount as String: key,
+                kSecValueData as String: data
+            ]
+            
+            let addStatus = SecItemAdd(addQuery as CFDictionary, nil)
+            
+            guard addStatus == errSecSuccess else {
+                throw KeychainError.unhandledError(status: addStatus)
+            }
+        default:
             throw KeychainError.unhandledError(status: status)
         }
     }
