@@ -10,7 +10,7 @@ import Foundation
 class NetworkManager {
     private let keychainStorageManager: StorageManager = KeychainStorageManager.shared
     
-    private let baseURL: URL = URL(string: "http://192.168.1.107:8080/api")!
+    private let baseURL: URL = URL(string: "http://192.168.0.93:8080/api")!
     private let urlSession: URLSession = .shared
     
     static let shared = NetworkManager()
@@ -41,7 +41,10 @@ class NetworkManager {
     }
     
     func get<T: Decodable>(from endpoint: Endpoint) async throws -> T {
-        let request = try createRequest(to: endpoint, of: .get)
+        let request = try createRequest(
+            to: endpoint,
+            of: .get
+        )
         let (responseData, response) = try await urlSession.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -60,7 +63,11 @@ class NetworkManager {
         with body: T
     ) async throws {
         let data = try JSONEncoder().encode(body)
-        let request = try createRequest(to: endpoint, of: .post, with: data)
+        let request = try createRequest(
+            to: endpoint,
+            of: .post,
+            with: data
+        )
         let (_, response) = try await urlSession.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -77,7 +84,11 @@ class NetworkManager {
         with body: S
     ) async throws -> T {
         let data = try JSONEncoder().encode(body)
-        let request = try createRequest(to: endpoint, of: .post, with: data)
+        let request = try createRequest(
+            to: endpoint,
+            of: .post,
+            with: data
+        )
         let (responseData, response) = try await urlSession.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -89,5 +100,26 @@ class NetworkManager {
         }
         
         return try JSONDecoder().decode(T.self, from: responseData)
+    }
+    
+    func patch<T: Encodable>(
+        to endpoint: Endpoint,
+        with body: T
+    ) async throws {
+        let data = try JSONEncoder().encode(body)
+        let request = try createRequest(
+            to: endpoint,
+            of: .patch,
+            with: data
+        )
+        let (_, response) = try await urlSession.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.init(rawValue: httpResponse.statusCode))
+        }
     }
 }

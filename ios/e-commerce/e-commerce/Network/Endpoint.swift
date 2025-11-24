@@ -11,4 +11,5 @@ enum Endpoint: String {
     case register = "app/customer"
     case login = "app/auth/login"
     case me = "app/customer/me"
+    case changePassword = "app/customer/change-password"
 }
