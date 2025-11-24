@@ -59,6 +59,18 @@ public class CustomerService implements UserDetailsService {
         customerRepository.save(customer);
     }
 
+    public void changePassword(String password) {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(()  -> new UsernameNotFoundException("User with email: " + email + " not found"));
+        customer.setPassword(passwordEncoder.encode(password));
+
+        customerRepository.save(customer);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return customerRepository.findByEmail(username)

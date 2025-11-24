@@ -4,6 +4,7 @@ import com.grabieckacper.ecommerce.app.model.Customer;
 import com.grabieckacper.ecommerce.app.request.CreateCustomerRequest;
 import com.grabieckacper.ecommerce.app.response.CustomerResponse;
 import com.grabieckacper.ecommerce.app.service.CustomerService;
+import com.grabieckacper.ecommerce.shared.request.ChangePasswordRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,13 @@ public class CustomerController {
                 createCustomerRequest.firstName(),
                 createCustomerRequest.lastName()
         );
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
+        customerService.changePassword(changePasswordRequest.password());
 
         return ResponseEntity.noContent().build();
     }
