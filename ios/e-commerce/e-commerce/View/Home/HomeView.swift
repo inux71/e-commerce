@@ -14,6 +14,15 @@ struct HomeView: View {
     var body: some View {
         TabView(selection: $viewModel.selectedTab) {
             Tab(
+                HomeTabViewItem.products.rawValue,
+                systemImage: "list.bullet",
+                value: .products
+            ) {
+                ProductsView()
+                    .environmentObject(coordinator)
+            }
+            
+            Tab(
                 HomeTabViewItem.account.rawValue,
                 systemImage: "person.crop.circle.fill",
                 value: .account

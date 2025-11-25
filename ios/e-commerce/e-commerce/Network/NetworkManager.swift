@@ -20,15 +20,24 @@ class NetworkManager {
     private func createRequest(
         to endpoint: Endpoint,
         of method: HTTPMethod,
+        attach queryItems: [URLQueryItem]? = nil,
         with body: Data? = nil
     ) throws -> URLRequest {
-        let url = baseURL.appendingPathComponent(endpoint.rawValue)
+        var url = baseURL.appendingPathComponent(endpoint.rawValue)
+        
+        if let queryItems = queryItems, var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+            components.queryItems = queryItems
+            
+            if let urlWithQuery = components.url {
+                url = urlWithQuery
+            }
+        }
         
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        if let token: String = try? keychainStorageManager.search(
+        if endpoint.requiresAuth, let token: String = try? keychainStorageManager.search(
             for: KeychainKey.accessToken,
             as: String.self
         ) {
@@ -40,10 +49,14 @@ class NetworkManager {
         return request
     }
     
-    func get<T: Decodable>(from endpoint: Endpoint) async throws -> T {
+    func get<T: Decodable>(
+        from endpoint: Endpoint,
+        attach queryItems: [URLQueryItem]? = nil
+    ) async throws -> T {
         let request = try createRequest(
             to: endpoint,
-            of: .get
+            of: .get,
+            attach: queryItems
         )
         let (responseData, response) = try await urlSession.data(for: request)
         

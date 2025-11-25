@@ -8,5 +8,6 @@
 import Foundation
 
 enum HomeTabViewItem: String, Hashable {
+    case products = "Products"
     case account = "Account"
 }

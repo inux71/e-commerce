@@ -10,6 +10,16 @@ import Foundation
 enum Endpoint: String {
     case register = "app/customer"
     case login = "app/auth/login"
+    case products = "/app/product"
     case me = "app/customer/me"
     case changePassword = "app/customer/change-password"
+    
+    var requiresAuth: Bool {
+        switch self {
+        case .register, .login, .products:
+            return false
+        default:
+            return true
+        }
+    }
 }

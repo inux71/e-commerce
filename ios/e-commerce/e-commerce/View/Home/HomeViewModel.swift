@@ -11,7 +11,7 @@ import Foundation
 class HomeViewModel: ObservableObject {
     private let keychainStorageManager: StorageManager = KeychainStorageManager.shared
     
-    @Published var selectedTab: HomeTabViewItem = .account
+    @Published var selectedTab: HomeTabViewItem = .products
     
     func isSignedIn() -> Bool {
         (try? keychainStorageManager.search(
