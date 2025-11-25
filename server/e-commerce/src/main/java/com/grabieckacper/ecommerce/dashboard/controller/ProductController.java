@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@RestController(value = "dashboard-product-controller")
 @RequestMapping("/api/dashboard/product")
 public class ProductController {
     private final ProductService productService;

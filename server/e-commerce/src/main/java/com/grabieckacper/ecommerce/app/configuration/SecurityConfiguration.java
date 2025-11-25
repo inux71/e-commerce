@@ -38,8 +38,14 @@ public class SecurityConfiguration {
                 )
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/api/app/auth/login", "/api/app/customer").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers(
+                                        "/api/app/auth/login",
+                                        "/api/app/customer",
+                                        "/api/app/product"
+                                )
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
