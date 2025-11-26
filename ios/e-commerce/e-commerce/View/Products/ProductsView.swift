@@ -17,10 +17,17 @@ struct ProductsView: View {
             ScrollView {
                 LazyVGrid(columns: [GridItem(), GridItem()]) {
                     ForEach(viewModel.products) { product in
-                        ProductCard(
+                        NavigationLink(destination: ProductDetailsView(
+                            id: product.id,
                             name: product.name,
+                            description: product.description,
                             price: product.price
-                        )
+                        )) {
+                            ProductCard(
+                                name: product.name,
+                                price: product.price
+                            )
+                        }
                     }
                 }
                 
