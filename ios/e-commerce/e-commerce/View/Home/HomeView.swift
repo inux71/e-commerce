@@ -23,6 +23,14 @@ struct HomeView: View {
             }
             
             Tab(
+                HomeTabViewItem.cart.rawValue,
+                systemImage: "cart",
+                value: .cart
+            ) {
+                CartView()
+            }
+            
+            Tab(
                 HomeTabViewItem.account.rawValue,
                 systemImage: "person.crop.circle.fill",
                 value: .account
