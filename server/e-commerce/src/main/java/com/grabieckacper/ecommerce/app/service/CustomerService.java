@@ -1,7 +1,9 @@
 package com.grabieckacper.ecommerce.app.service;
 
+import com.grabieckacper.ecommerce.app.model.Cart;
 import com.grabieckacper.ecommerce.app.model.Customer;
 import com.grabieckacper.ecommerce.app.model.Profile;
+import com.grabieckacper.ecommerce.app.repository.CartRepository;
 import com.grabieckacper.ecommerce.app.repository.CustomerRepository;
 import com.grabieckacper.ecommerce.app.repository.ProfileRepository;
 import jakarta.persistence.EntityExistsException;
@@ -18,13 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerService implements UserDetailsService {
     private final CustomerRepository customerRepository;
     private final ProfileRepository profileRepository;
+    private final CartRepository cartRepository;
     private final PasswordEncoder passwordEncoder;
 
     public CustomerService(
-            CustomerRepository customerRepository, ProfileRepository profileRepository, PasswordEncoder passwordEncoder
+            CustomerRepository customerRepository, ProfileRepository profileRepository, CartRepository cartRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.customerRepository = customerRepository;
         this.profileRepository = profileRepository;
+        this.cartRepository = cartRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -51,11 +56,17 @@ public class CustomerService implements UserDetailsService {
         Profile profile = new Profile();
         profile.setFirstName(firstName);
         profile.setLastName(lastName);
-
         profile.setCustomer(customer);
         customer.setProfile(profile);
 
         profileRepository.save(profile);
+
+        Cart cart = new Cart();
+        cart.setCustomer(customer);
+        customer.setCart(cart);
+
+        cartRepository.save(cart);
+
         customerRepository.save(customer);
     }
 
