@@ -10,6 +10,7 @@ import Foundation
 enum Endpoint: String {
     case register = "app/customer"
     case login = "app/auth/login"
+    case refresh = "app/auth/refresh"
     case products = "/app/product"
     case me = "app/customer/me"
     case changePassword = "app/customer/change-password"

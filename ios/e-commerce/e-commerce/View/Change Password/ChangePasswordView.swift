@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ChangePasswordView: View {
-    @EnvironmentObject private var homeCoordinator: HomeCoordinator
-    
     @StateObject private var viewModel: ChangePasswordViewModel = ChangePasswordViewModel()
     
     var body: some View {
@@ -57,6 +55,5 @@ struct ChangePasswordView: View {
 #Preview {
     NavigationStack {
         ChangePasswordView()
-            .environmentObject(HomeCoordinator())
     }
 }

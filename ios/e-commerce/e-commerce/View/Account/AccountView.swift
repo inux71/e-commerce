@@ -16,7 +16,7 @@ struct AccountView: View {
     var body: some View {
         NavigationStack {
             List {
-                NavigationLink(destination: CredentialsView(email: viewModel.email).environmentObject(homeCoordinator)) {
+                NavigationLink(destination: CredentialsView(email: viewModel.email)) {
                     Label("Credentials", systemImage: "key.shield.fill")
                 }
                 
@@ -42,24 +42,13 @@ struct AccountView: View {
                     viewModel.errorMessage = nil
                 }
             }
-            .onAppear {
-                Task {
-                    await viewModel.getCustomer(onUnauthorized: {
-                        homeCoordinator.show(
-                            item: .login,
-                            onDismiss: {
-                                Task {
-                                    await viewModel.getCustomer()
-                                }
-                            }
-                        )
-                    })
-                }
-            }
             .overlay(alignment: .center) {
                 if viewModel.isLoading {
                     ProgressView()
                 }
+            }
+            .task {
+                await viewModel.getCustomer()
             }
         }
     }

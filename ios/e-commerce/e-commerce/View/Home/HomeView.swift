@@ -19,7 +19,6 @@ struct HomeView: View {
                 value: .products
             ) {
                 ProductsView()
-                    .environmentObject(coordinator)
             }
             
             Tab(
@@ -39,11 +38,6 @@ struct HomeView: View {
                     .environmentObject(coordinator)
             }
         }
-        .onAppear {
-            if !viewModel.isSignedIn() {
-                coordinator.show(item: .login)
-            }
-        }
         .fullScreenCover(
             item: $coordinator.item,
             onDismiss: coordinator.onDismiss
@@ -54,9 +48,24 @@ struct HomeView: View {
                     .environmentObject(coordinator)
             }
         }
+        .overlay(alignment: .center) {
+            if viewModel.isLoading {
+                ProgressView()
+            }
+        }
+        .task {
+            if viewModel.isSignedIn() {
+                await viewModel.refreshToken(onUnauthorized: {
+                    coordinator.show(item: .login)
+                })
+            } else {
+                coordinator.show(item: .login)
+            }
+        }
     }
 }
 
 #Preview {
     HomeView()
+        .environmentObject(HomeCoordinator())
 }

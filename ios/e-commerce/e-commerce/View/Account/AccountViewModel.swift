@@ -19,7 +19,7 @@ class AccountViewModel: ObservableObject {
     @Published var email: String = ""
     
     @MainActor
-    func getCustomer(onUnauthorized: (() -> Void)? = nil) async {
+    func getCustomer() async {
         isLoading = true
         
         defer {
@@ -31,12 +31,8 @@ class AccountViewModel: ObservableObject {
             
             email = customer.email
         } catch {
-            if let error = error as? URLError, error.errorCode == 401 {
-                onUnauthorized?()
-            } else {
-                isAlertPresented = true
-                errorMessage = error.localizedDescription
-            }
+            isAlertPresented = true
+            errorMessage = error.localizedDescription
         }
     }
     

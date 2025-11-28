@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct CredentialsView: View {
-    @EnvironmentObject private var homeCoordinator: HomeCoordinator
-    
     private let email: String
     
     init(email: String) {
@@ -20,7 +18,7 @@ struct CredentialsView: View {
         List {
             LabeledContent("Email", value: email)
             
-            NavigationLink(destination: ChangePasswordView().environmentObject(homeCoordinator)) {
+            NavigationLink(destination: ChangePasswordView()) {
                 LabeledContent("Password", value: "********")
             }
         }
@@ -31,6 +29,5 @@ struct CredentialsView: View {
 #Preview {
     NavigationStack {
         CredentialsView(email: "example@email.com")
-            .environmentObject(HomeCoordinator())
     }
 }

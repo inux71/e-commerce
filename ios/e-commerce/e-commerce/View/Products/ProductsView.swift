@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ProductsView: View {
-    @EnvironmentObject private var homeCoordinator: HomeCoordinator
-    
     @StateObject private var viewModel: ProductsViewModel = ProductsViewModel()
     
     var body: some View {
@@ -65,6 +63,5 @@ struct ProductsView: View {
 #Preview {
     NavigationStack {
         ProductsView()
-            .environmentObject(HomeCoordinator())
     }
 }

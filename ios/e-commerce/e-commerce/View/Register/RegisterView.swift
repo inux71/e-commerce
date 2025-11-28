@@ -97,12 +97,10 @@ struct RegisterView: View {
             }
             .textFieldStyle(.roundedBorder)
             
-            Button(action: {
+            Button("Sign up") {
                 Task {
                     await viewModel.signUp()
                 }
-            }) {
-                Text("Sign up")
             }
             .buttonStyle(.glass)
             .disabled(viewModel.signUpButtonDisabled)
@@ -110,10 +108,8 @@ struct RegisterView: View {
             HStack {
                 Text("Already have an acount?")
                 
-                Button(action: {
+                Button("Sign in") {
                     coordinator.navigateBack()
-                }) {
-                    Text("Sign in")
                 }
             }
         }

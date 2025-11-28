@@ -10,6 +10,9 @@ import Foundation
 
 class HomeViewModel: ObservableObject {
     private let keychainStorageManager: StorageManager = KeychainStorageManager.shared
+    private let networkManager: NetworkManager = NetworkManager.shared
+    
+    @Published var isLoading: Bool = false
     
     @Published var selectedTab: HomeTabViewItem = .products
     
@@ -18,5 +21,25 @@ class HomeViewModel: ObservableObject {
             for: KeychainKey.accessToken,
             as: String.self
         )) != nil
+    }
+    
+    @MainActor
+    func refreshToken(onUnauthorized: () -> Void) async {
+        isLoading = true
+        
+        defer {
+            isLoading = false
+        }
+        
+        do {
+            let token: Token = try await networkManager.post(to: .refresh)
+            
+            try keychainStorageManager.save(
+                for: KeychainKey.accessToken,
+                value: token.token
+            )
+        } catch {
+            onUnauthorized()
+        }
     }
 }

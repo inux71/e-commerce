@@ -115,6 +115,24 @@ class NetworkManager {
         return try JSONDecoder().decode(T.self, from: responseData)
     }
     
+    func post<T: Decodable>(to endpoint: Endpoint) async throws -> T {
+        let request = try createRequest(
+            to: endpoint,
+            of: .post
+        )
+        let (responseData, response) = try await urlSession.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.init(rawValue: httpResponse.statusCode))
+        }
+        
+        return try JSONDecoder().decode(T.self, from: responseData)
+    }
+    
     func patch<T: Encodable>(
         to endpoint: Endpoint,
         with body: T
