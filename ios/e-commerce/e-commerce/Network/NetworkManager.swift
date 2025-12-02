@@ -10,7 +10,7 @@ import Foundation
 class NetworkManager {
     private let keychainStorageManager: StorageManager = KeychainStorageManager.shared
     
-    private let baseURL: URL = URL(string: "http://192.168.0.93:8080/api")!
+    private let baseURL: URL = URL(string: "http://192.168.0.47:8080/api")!
     private let urlSession: URLSession = .shared
     
     static let shared = NetworkManager()
@@ -23,7 +23,7 @@ class NetworkManager {
         attach queryItems: [URLQueryItem]? = nil,
         with body: Data? = nil
     ) throws -> URLRequest {
-        var url = baseURL.appendingPathComponent(endpoint.rawValue)
+        var url = baseURL.appendingPathComponent(endpoint.path)
         
         if let queryItems = queryItems, var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
             components.queryItems = queryItems
@@ -113,6 +113,22 @@ class NetworkManager {
         }
         
         return try JSONDecoder().decode(T.self, from: responseData)
+    }
+    
+    func post(to endpoint: Endpoint) async throws {
+        let request = try createRequest(
+            to: endpoint,
+            of: .post
+        )
+        let (_, response) = try await urlSession.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.init(rawValue: httpResponse.statusCode))
+        }
     }
     
     func post<T: Decodable>(to endpoint: Endpoint) async throws -> T {

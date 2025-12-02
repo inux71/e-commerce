@@ -31,11 +31,27 @@ struct ProductDetailsView: View {
                     "Add to cart",
                     systemImage: "cart.badge.plus"
                 ) {
-                    // TODO: add to cart
+                    Task {
+                        await viewModel.addToCart(productId: id)
+                    }
                 }
             }
         }
+        .alert(
+            viewModel.message ?? "",
+            isPresented: $viewModel.isAlertPresented
+        ) {
+            Button("OK") {
+                viewModel.isAlertPresented = false
+                viewModel.message = nil
+            }
+        }
         .navigationTitle(name)
+        .overlay {
+            if viewModel.isLoading {
+                ProgressView()
+            }
+        }
     }
 }
 

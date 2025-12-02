@@ -12,16 +12,39 @@ struct CartView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                // TODO: display products
+            List(viewModel.cartProducts) { cartProduct in
+                let product: Product = cartProduct.product
+                
+                NavigationLink(destination: ProductDetailsView(
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    price: product.price
+                )) {
+                    CartItem(
+                        name: product.name,
+                        quantity: cartProduct.quantity,
+                        price: product.price
+                    )
+                }
             }
             .navigationTitle("Cart")
             .overlay {
-                ContentUnavailableView(
-                    "Your cart is empty",
-                    systemImage: "magnifyingglass",
-                    description: Text("There is no products in your cart")
-                )
+                if viewModel.isLoading {
+                    ProgressView()
+                }
+            }
+            .overlay {
+                if viewModel.isCartEmpty {
+                    ContentUnavailableView(
+                        "Your cart is empty",
+                        systemImage: "magnifyingglass",
+                        description: Text("There is no products in your cart")
+                    )
+                }
+            }
+            .task {
+                await viewModel.fetchCart()
             }
         }
     }
