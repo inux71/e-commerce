@@ -1,5 +1,6 @@
 package com.grabieckacper.ecommerce.shared.model;
 
+import com.grabieckacper.ecommerce.app.model.CartProduct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -55,6 +56,9 @@ public class Product extends BaseEntity {
     )
     private Set<Category> categories = new HashSet<>();
 
+    @OneToMany(mappedBy = "product")
+    private Set<CartProduct> cartProducts = new HashSet<>();
+
     public String getName() {
         return name;
     }
@@ -101,5 +105,14 @@ public class Product extends BaseEntity {
 
     public void addCategory(Category category) {
         categories.add(category);
+    }
+
+    public Set<CartProduct> getCartProducts() {
+        return cartProducts;
+    }
+
+    public void addProductToCart(CartProduct cartProduct) {
+        cartProducts.add(cartProduct);
+        cartProduct.setProduct(this);
     }
 }
