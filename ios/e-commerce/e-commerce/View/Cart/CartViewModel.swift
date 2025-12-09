@@ -38,4 +38,28 @@ class CartViewModel: ObservableObject {
             message = error.localizedDescription
         }
     }
+    
+    @MainActor
+    func removeProductFromCart(at offsets: IndexSet) {
+        guard let index: Int = offsets.first else { return }
+        
+        let productId: Int = cartProducts[index].product.id
+        
+        Task {
+            isLoading = true
+            
+            defer {
+                isLoading = false
+            }
+            
+            do {
+                try await networkManager.delete(at: .removeFromCart(productId: productId))
+                
+                cartProducts.remove(at: index)
+            } catch {
+                isAlertPresented = true
+                message = error.localizedDescription
+            }
+        }
+    }
 }

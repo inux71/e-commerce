@@ -14,6 +14,7 @@ enum Endpoint {
     case products
     case cart
     case addToCart(productId: Int)
+    case removeFromCart(productId: Int)
     case me
     case changePassword
     
@@ -30,6 +31,8 @@ enum Endpoint {
         case .cart:
             return "app/cart"
         case .addToCart(let productId):
+            return "app/cart/\(productId)"
+        case .removeFromCart(let productId):
             return "app/cart/\(productId)"
         case .me:
             return "app/customer/me"

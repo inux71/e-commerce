@@ -12,20 +12,32 @@ struct CartView: View {
     
     var body: some View {
         NavigationStack {
-            List(viewModel.cartProducts) { cartProduct in
-                let product: Product = cartProduct.product
-                
-                NavigationLink(destination: ProductDetailsView(
-                    id: product.id,
-                    name: product.name,
-                    description: product.description,
-                    price: product.price
-                )) {
-                    CartItem(
+            List {
+                ForEach(viewModel.cartProducts) { cartProduct in
+                    let product: Product = cartProduct.product
+                    
+                    NavigationLink(destination: ProductDetailsView(
+                        id: product.id,
                         name: product.name,
-                        quantity: cartProduct.quantity,
+                        description: product.description,
                         price: product.price
-                    )
+                    )) {
+                        CartItem(
+                            name: product.name,
+                            quantity: cartProduct.quantity,
+                            price: product.price
+                        )
+                    }
+                }
+                .onDelete(perform: viewModel.removeProductFromCart)
+            }
+            .alert(
+                viewModel.message ?? "",
+                isPresented: $viewModel.isAlertPresented
+            ) {
+                Button("OK") {
+                    viewModel.isAlertPresented = false
+                    viewModel.message = nil
                 }
             }
             .navigationTitle("Cart")

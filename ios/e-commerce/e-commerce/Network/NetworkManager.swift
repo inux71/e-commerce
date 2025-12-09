@@ -169,4 +169,20 @@ class NetworkManager {
             throw URLError(.init(rawValue: httpResponse.statusCode))
         }
     }
+    
+    func delete(at endpoint: Endpoint) async throws {
+        let request = try createRequest(
+            to: endpoint,
+            of: .delete
+        )
+        let (_, response) = try await urlSession.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.init(rawValue: httpResponse.statusCode))
+        }
+    }
 }
