@@ -34,4 +34,8 @@ public class Cart extends BaseEntity {
         cartProducts.add(product);
         product.setCart(this);
     }
+
+    public void removeProductFromCart(CartProduct cartProduct) {
+        cartProducts.remove(cartProduct);
+    }
 }

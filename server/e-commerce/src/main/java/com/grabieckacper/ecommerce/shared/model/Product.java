@@ -115,4 +115,8 @@ public class Product extends BaseEntity {
         cartProducts.add(cartProduct);
         cartProduct.setProduct(this);
     }
+
+    public void removeProductFromCart(CartProduct cartProduct) {
+        cartProducts.remove(cartProduct);
+    }
 }

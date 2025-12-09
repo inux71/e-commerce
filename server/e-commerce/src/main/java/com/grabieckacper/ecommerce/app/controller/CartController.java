@@ -50,4 +50,11 @@ public class CartController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> removeProductFromCart(@PathVariable Long productId) {
+        cartService.removeProductFromCart(productId);
+
+        return ResponseEntity.noContent().build();
+    }
 }
