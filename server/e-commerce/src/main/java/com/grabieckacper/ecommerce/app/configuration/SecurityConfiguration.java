@@ -29,7 +29,7 @@ public class SecurityConfiguration {
 
     @Bean(name = "app-security-filter-chain")
     @Order(0)
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         return httpSecurity
                 .securityMatcher("/api/app/**")
                 .csrf(AbstractHttpConfigurer::disable)

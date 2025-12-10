@@ -1,7 +1,10 @@
 package com.grabieckacper.ecommerce.shared.handler;
 
+import com.grabieckacper.ecommerce.shared.exception.UnauthorizedException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,6 +22,12 @@ import java.io.FileNotFoundException;
 
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
+    // 401 - Unauthorized
+    @ExceptionHandler(value = { UnauthorizedException.class })
+    public ResponseEntity<Object> handle401Unauthorized(RuntimeException ex, WebRequest webRequest) {
+        return handleExceptionInternal(ex, ex.getLocalizedMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, webRequest);
+    }
+
     // 404 - Not found
     @ExceptionHandler(value = { EntityNotFoundException.class, FileNotFoundException.class, UsernameNotFoundException.class })
     public ResponseEntity<Object> handle404NotFound(RuntimeException ex, WebRequest webRequest) {
@@ -31,7 +40,8 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+    @NullMarked
+    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request
     ) {
         ObjectError error = ex.getBindingResult()

@@ -1,6 +1,7 @@
 package com.grabieckacper.ecommerce.dashboard.service;
 
 import com.grabieckacper.ecommerce.dashboard.model.Employee;
+import com.grabieckacper.ecommerce.shared.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +24,10 @@ public class AuthenticationService {
 
     public String generateJwtToken(Authentication authentication) {
         Employee employee = (Employee) authentication.getPrincipal();
+
+        if (employee == null) {
+            throw new UnauthorizedException();
+        }
 
         Instant now = Instant.now();
         List<String> authorities = authentication.getAuthorities()

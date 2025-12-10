@@ -4,6 +4,7 @@ import com.grabieckacper.ecommerce.app.model.Cart;
 import com.grabieckacper.ecommerce.app.model.CartProduct;
 import com.grabieckacper.ecommerce.app.model.Customer;
 import com.grabieckacper.ecommerce.app.repository.CustomerRepository;
+import com.grabieckacper.ecommerce.shared.exception.UnauthorizedException;
 import com.grabieckacper.ecommerce.shared.model.Product;
 import com.grabieckacper.ecommerce.shared.repository.CartProductRepository;
 import com.grabieckacper.ecommerce.shared.repository.ProductRepository;
@@ -34,6 +35,11 @@ public class CartService {
     private Customer getCurrentCustomer() {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
+
+        if (authentication == null) {
+            throw new UnauthorizedException();
+        }
+
         String email = authentication.getName();
 
         return customerRepository.findByEmail(email)

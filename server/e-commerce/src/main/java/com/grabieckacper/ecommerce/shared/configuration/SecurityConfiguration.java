@@ -19,7 +19,7 @@ import java.util.List;
 public class SecurityConfiguration {
     @Bean(name = "shared-security-filter-chain")
     @Order(2)
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         return httpSecurity
                 .securityMatcher("/api/**")
                 .csrf(AbstractHttpConfigurer::disable)

@@ -6,7 +6,9 @@ import com.grabieckacper.ecommerce.app.model.Profile;
 import com.grabieckacper.ecommerce.app.repository.CartRepository;
 import com.grabieckacper.ecommerce.app.repository.CustomerRepository;
 import com.grabieckacper.ecommerce.app.repository.ProfileRepository;
+import com.grabieckacper.ecommerce.shared.exception.UnauthorizedException;
 import jakarta.persistence.EntityExistsException;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +38,11 @@ public class CustomerService implements UserDetailsService {
     public Customer getMe() {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
+
+        if (authentication == null) {
+            throw new UnauthorizedException();
+        }
+
         String email = authentication.getName();
 
         return customerRepository.findByEmail(email)
@@ -73,6 +80,11 @@ public class CustomerService implements UserDetailsService {
     public void changePassword(String password) {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
+
+        if (authentication == null) {
+            throw new UnauthorizedException();
+        }
+
         String email = authentication.getName();
 
         Customer customer = customerRepository.findByEmail(email)
@@ -83,6 +95,7 @@ public class CustomerService implements UserDetailsService {
     }
 
     @Override
+    @NullMarked
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return customerRepository.findByEmail(username)
                 .orElseThrow(()  -> new UsernameNotFoundException("User with email: " + username + " not found"));

@@ -7,6 +7,8 @@ import org.springframework.security.access.expression.method.DefaultMethodSecuri
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authorization.AuthorizationManagerFactory;
+import org.springframework.security.authorization.DefaultAuthorizationManagerFactory;
 
 @Configuration
 public class RoleConfiguration {
@@ -18,10 +20,18 @@ public class RoleConfiguration {
     }
 
     @Bean
+    public <T>AuthorizationManagerFactory<T> authorizationManagerFactory() {
+        DefaultAuthorizationManagerFactory<T> authorizationManagerFactory = new DefaultAuthorizationManagerFactory<>();
+        authorizationManagerFactory.setRoleHierarchy(roleHierarchy());
+
+        return authorizationManagerFactory;
+    }
+
+    @Bean
     public MethodSecurityExpressionHandler methodSecurityExpressionHandler() {
         DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler =
                 new DefaultMethodSecurityExpressionHandler();
-        defaultMethodSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
+        defaultMethodSecurityExpressionHandler.setAuthorizationManagerFactory(authorizationManagerFactory());
 
         return defaultMethodSecurityExpressionHandler;
     }

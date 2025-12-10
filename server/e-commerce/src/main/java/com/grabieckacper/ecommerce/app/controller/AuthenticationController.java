@@ -5,6 +5,7 @@ import com.grabieckacper.ecommerce.shared.request.LoginRequest;
 import com.grabieckacper.ecommerce.shared.response.LoginResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,6 +45,11 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> refresh() {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
+
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         String jwtToken = authenticationService.generateJwtToken(authentication);
         LoginResponse loginResponse = new LoginResponse(jwtToken);
 

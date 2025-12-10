@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,6 +23,7 @@ public abstract class User extends BaseEntity implements UserDetails {
     protected String password;
 
     @Override
+    @NullMarked
     public String getUsername() {
         return email;
     }
@@ -40,6 +42,7 @@ public abstract class User extends BaseEntity implements UserDetails {
     }
 
     @Override
+    @NullMarked
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
