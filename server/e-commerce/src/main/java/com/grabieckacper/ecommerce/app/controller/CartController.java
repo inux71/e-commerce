@@ -1,11 +1,13 @@
 package com.grabieckacper.ecommerce.app.controller;
 
 import com.grabieckacper.ecommerce.app.model.Cart;
+import com.grabieckacper.ecommerce.app.request.UpdateCartProductQuantityRequest;
 import com.grabieckacper.ecommerce.app.response.CartProductResponse;
 import com.grabieckacper.ecommerce.app.response.CartResponse;
 import com.grabieckacper.ecommerce.app.response.ProductResponse;
 import com.grabieckacper.ecommerce.app.service.CartService;
 import com.grabieckacper.ecommerce.shared.model.Product;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +49,16 @@ public class CartController {
     @PostMapping("/{productId}")
     public ResponseEntity<Void> addProductToCart(@PathVariable Long productId) {
         cartService.addProductToCart(productId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{productId}")
+    public ResponseEntity<Void> updateProductQuantity(
+            @PathVariable Long productId,
+            @Valid @RequestBody UpdateCartProductQuantityRequest updateCartProductQuantityRequest
+    ) {
+        cartService.updateProductQuantity(productId, updateCartProductQuantityRequest.quantity());
 
         return ResponseEntity.noContent().build();
     }

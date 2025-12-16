@@ -78,6 +78,18 @@ public class CartService {
     }
 
     @Transactional
+    public void updateProductQuantity(Long productId, Integer quantity) {
+        Customer customer = getCurrentCustomer();
+        Cart cart = customer.getCart();
+        CartProduct cartProduct = cartProductRepository.findByCartIdAndProductId(cart.getId(), productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product with id: " + productId + "is not in the cart"));
+
+        cartProduct.setQuantity(quantity);
+
+        cartProductRepository.save(cartProduct);
+    }
+
+    @Transactional
     public void removeProductFromCart(Long productId) {
         Customer customer = getCurrentCustomer();
         Cart cart = customer.getCart();
