@@ -8,19 +8,13 @@
 import SwiftUI
 
 struct CartItem: View {
-    @State private var quantity: Int
+    @Binding var quantity: Int
     
     let name: String
     let price: Double
     
-    init(
-        name: String,
-        quantity: Int,
-        price: Double
-    ) {
-        self.name = name
-        self.quantity = quantity
-        self.price = price
+    var totalPrice: Double {
+        Double(quantity) * price
     }
     
     var body: some View {
@@ -33,12 +27,12 @@ struct CartItem: View {
                 Text(name)
                 
                 Stepper(
-                    "Quantity: \(quantity)",
+                    "Q: \(quantity)",
                     value: $quantity,
                     in: 1...Int.max
                 )
                 
-                Text(price.formatted(.currency(code: "PLN")))
+                Text(totalPrice.formatted(.currency(code: "PLN")))
             }
         }
     }
@@ -46,8 +40,8 @@ struct CartItem: View {
 
 #Preview {
     CartItem(
+        quantity: Binding.constant(1),
         name: "iPhone 13",
-        quantity: 1,
-        price: 125.46
+        price: 5799
     )
 }

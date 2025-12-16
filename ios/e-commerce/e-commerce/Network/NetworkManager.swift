@@ -10,7 +10,7 @@ import Foundation
 class NetworkManager {
     private let keychainStorageManager: StorageManager = KeychainStorageManager.shared
     
-    private let baseURL: URL = URL(string: "http://192.168.0.47:8080/api")!
+    private let baseURL: URL = URL(string: "http://192.168.0.82:8080/api")!
     private let urlSession: URLSession = .shared
     
     static let shared = NetworkManager()

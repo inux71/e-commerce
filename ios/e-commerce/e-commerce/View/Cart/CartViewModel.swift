@@ -21,6 +21,12 @@ class CartViewModel: ObservableObject {
         cartProducts.isEmpty
     }
     
+    var totalPrice: Double {
+        cartProducts.reduce(0.0, { result, cartProduct in
+            result + Double(cartProduct.quantity) * cartProduct.product.price
+        })
+    }
+    
     @MainActor
     func fetchCart() async {
         isLoading = true
@@ -33,6 +39,27 @@ class CartViewModel: ObservableObject {
             let cart: Cart = try await networkManager.get(from: .cart)
             
             cartProducts = cart.cartProducts
+        } catch {
+            isAlertPresented = true
+            message = error.localizedDescription
+        }
+    }
+    
+    @MainActor
+    func updateProductQuantity(productId: Int, quantity: Int) async {
+        isLoading = true
+        
+        defer {
+            isLoading = false
+        }
+        
+        do {
+            let updateCartProductQuantityRequest = UpdateCartProductQuantityRequest(quantity: quantity)
+            
+            try await networkManager.patch(
+                to: .updateCartProductQuantity(productId: productId),
+                with: updateCartProductQuantityRequest
+            )
         } catch {
             isAlertPresented = true
             message = error.localizedDescription

@@ -10,5 +10,5 @@ import Foundation
 struct CartProduct: Decodable, Identifiable {
     let id: Int
     let product: Product
-    let quantity: Int
+    var quantity: Int
 }
