@@ -1,10 +1,12 @@
 package com.grabieckacper.ecommerce.app.repository;
 
 import com.grabieckacper.ecommerce.app.model.City;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface CityRepository extends CrudRepository<City, Long> {
-    
+public interface CityRepository extends ListCrudRepository<City, Long> {
+    List<City> findAllByCountry_Id(Long countryId);
 }
