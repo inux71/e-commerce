@@ -17,6 +17,7 @@ class AccountViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
     
     @Published var email: String = ""
+    @Published var addresses: Int = 0
     
     @MainActor
     func getCustomer() async {
@@ -30,6 +31,7 @@ class AccountViewModel: ObservableObject {
             let customer: Customer = try await networkManager.get(from: .me)
             
             email = customer.email
+            addresses = customer.addresses
         } catch {
             isAlertPresented = true
             errorMessage = error.localizedDescription

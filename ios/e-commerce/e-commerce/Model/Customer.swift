@@ -10,4 +10,5 @@ import Foundation
 struct Customer: Decodable {
     let id: Int
     let email: String
+    let addresses: Int
 }

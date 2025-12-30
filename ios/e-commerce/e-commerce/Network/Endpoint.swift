@@ -18,6 +18,7 @@ enum Endpoint {
     case removeFromCart(productId: Int)
     case me
     case changePassword
+    case addresses
     
     var path: String {
         switch self {
@@ -41,6 +42,8 @@ enum Endpoint {
             return "app/customer/me"
         case .changePassword:
             return "app/customer/change-password"
+        case .addresses:
+            return "app/address"
         }
     }
     

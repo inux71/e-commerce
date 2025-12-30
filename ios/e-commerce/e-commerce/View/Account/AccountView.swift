@@ -16,8 +16,20 @@ struct AccountView: View {
     var body: some View {
         NavigationStack {
             List {
-                NavigationLink(destination: CredentialsView(email: viewModel.email)) {
-                    Label("Credentials", systemImage: "key.shield.fill")
+                Section {
+                    NavigationLink(destination: CredentialsView(email: viewModel.email)) {
+                        Label("Credentials", systemImage: "key.shield.fill")
+                    }
+                }
+                
+                Section("Orders") {
+                    NavigationLink(destination: AddressesView()) {
+                        LabeledContent {
+                            Text("\(viewModel.addresses)")
+                        } label: {
+                            Label("Addresses", systemImage: "location.fill")
+                        }
+                    }
                 }
                 
                 Section {
