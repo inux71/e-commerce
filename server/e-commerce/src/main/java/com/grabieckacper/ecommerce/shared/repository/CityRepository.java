@@ -1,6 +1,6 @@
-package com.grabieckacper.ecommerce.app.repository;
+package com.grabieckacper.ecommerce.shared.repository;
 
-import com.grabieckacper.ecommerce.app.model.City;
+import com.grabieckacper.ecommerce.shared.model.City;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -24,7 +24,8 @@ public class CustomerController {
 
         CustomerResponse response = new CustomerResponse(
                 customer.getId(),
-                customer.getUsername()
+                customer.getUsername(),
+                customer.getAddresses().size()
         );
 
         return ResponseEntity.ok(response);

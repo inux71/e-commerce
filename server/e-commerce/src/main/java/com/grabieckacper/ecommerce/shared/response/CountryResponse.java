@@ -1,4 +1,4 @@
-package com.grabieckacper.ecommerce.app.response;
+package com.grabieckacper.ecommerce.shared.response;
 
 public record CountryResponse(
         Long id,

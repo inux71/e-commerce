@@ -1,7 +1,7 @@
-package com.grabieckacper.ecommerce.app.service;
+package com.grabieckacper.ecommerce.shared.service;
 
-import com.grabieckacper.ecommerce.app.model.Country;
-import com.grabieckacper.ecommerce.app.repository.CountryRepository;
+import com.grabieckacper.ecommerce.shared.model.Country;
+import com.grabieckacper.ecommerce.shared.repository.CountryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,5 @@
-package com.grabieckacper.ecommerce.app.model;
+package com.grabieckacper.ecommerce.shared.model;
 
-import com.grabieckacper.ecommerce.shared.model.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -8,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Immutable;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,7 +22,7 @@ public class Country extends BaseEntity {
     private String iso2;
 
     @OneToMany(mappedBy = "country")
-    private Set<City> cities;
+    private Set<City> cities = new HashSet<>();
 
     public String getName() {
         return name;

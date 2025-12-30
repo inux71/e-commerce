@@ -1,10 +1,11 @@
 package com.grabieckacper.ecommerce.app.model;
 
+import com.grabieckacper.ecommerce.shared.model.Address;
 import com.grabieckacper.ecommerce.shared.model.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Customer")
@@ -16,6 +17,9 @@ public class Customer extends User {
     @OneToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Address> addresses = new ArrayList<>();
 
     public Profile getProfile() {
         return profile;
@@ -31,5 +35,9 @@ public class Customer extends User {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
     }
 }

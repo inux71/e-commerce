@@ -1,8 +1,8 @@
-package com.grabieckacper.ecommerce.app.controller;
+package com.grabieckacper.ecommerce.shared.controller;
 
-import com.grabieckacper.ecommerce.app.model.City;
-import com.grabieckacper.ecommerce.app.response.CityResponse;
-import com.grabieckacper.ecommerce.app.service.CityService;
+import com.grabieckacper.ecommerce.shared.model.City;
+import com.grabieckacper.ecommerce.shared.response.CityResponse;
+import com.grabieckacper.ecommerce.shared.service.CityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/app/city")
+@RequestMapping("/api/city")
 public class CityController {
     private final CityService cityService;
 
