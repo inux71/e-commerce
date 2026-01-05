@@ -40,4 +40,8 @@ public class Customer extends User {
     public List<Address> getAddresses() {
         return addresses;
     }
+
+    public void addAddress(Address address) {
+        addresses.add(address);
+    }
 }

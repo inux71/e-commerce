@@ -1,12 +1,12 @@
 package com.grabieckacper.ecommerce.app.controller;
 
+import com.grabieckacper.ecommerce.app.request.CreateAddressRequest;
 import com.grabieckacper.ecommerce.app.service.AddressService;
 import com.grabieckacper.ecommerce.shared.model.Address;
 import com.grabieckacper.ecommerce.shared.response.AddressResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +33,16 @@ public class AddressController {
                 .toList();
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createAddress(@Valid @RequestBody CreateAddressRequest createAddressRequest) {
+        addressService.createAddress(
+                createAddressRequest.postalCode(),
+                createAddressRequest.cityId(),
+                createAddressRequest.street()
+        );
+
+        return ResponseEntity.noContent().build();
     }
 }
