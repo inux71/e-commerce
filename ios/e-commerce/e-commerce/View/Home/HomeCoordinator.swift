@@ -8,18 +8,31 @@
 import Combine
 import Foundation
 
-class HomeCoordinator: ObservableObject, FullScreenCoverable {
-    typealias Item = HomeFullScreenCoverableItem
+class HomeCoordinator: ObservableObject, FullScreenCoverable, Sheetable {
+    typealias FullScreenCoverableItem = HomeFullScreenCoverableItem
+    typealias SheetableItem = HomeSheetableItem
     
-    @Published var item: HomeFullScreenCoverableItem?
-    private(set) var onDismiss: (() -> Void)?
+    @Published var fullScreenCoverableItem: HomeFullScreenCoverableItem?
+    private(set) var onFullScreenCoverableItemDismiss: (() -> Void)?
     
-    func show(item: HomeFullScreenCoverableItem, onDismiss: (() -> Void)? = nil) {
-        self.item = item
-        self.onDismiss = onDismiss
+    @Published var sheetableItem: HomeSheetableItem?
+    private(set) var onSheetableItemDismiss: (() -> Void)?
+    
+    func showFullScreenCoverableItem(item: HomeFullScreenCoverableItem, onDismiss: (() -> Void)? = nil) {
+        self.fullScreenCoverableItem = item
+        self.onFullScreenCoverableItemDismiss = onDismiss
     }
     
-    func dismiss() {
-        self.item = nil
+    func dismissFullScreenCoverableItem() {
+        self.fullScreenCoverableItem = nil
+    }
+    
+    func showSheetableItem(item: HomeSheetableItem, onDismiss: (() -> Void)? = nil) {
+        self.sheetableItem = item
+        self.onSheetableItemDismiss = onDismiss
+    }
+    
+    func dismissSheetableItem() {
+        self.sheetableItem = nil
     }
 }

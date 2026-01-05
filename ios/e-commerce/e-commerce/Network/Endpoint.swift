@@ -19,6 +19,9 @@ enum Endpoint {
     case me
     case changePassword
     case addresses
+    case createAddress
+    case countries
+    case cities(countryId: Int)
     
     var path: String {
         switch self {
@@ -44,12 +47,18 @@ enum Endpoint {
             return "app/customer/change-password"
         case .addresses:
             return "app/address"
+        case .createAddress:
+            return "app/address"
+        case .countries:
+            return "country"
+        case .cities(let countryId):
+            return "city/\(countryId)"
         }
     }
     
     var requiresAuth: Bool {
         switch self {
-        case .register, .login, .products:
+        case .register, .login, .products, .countries, .cities:
             return false
         default:
             return true

@@ -8,11 +8,11 @@
 import Foundation
 
 protocol FullScreenCoverable {
-    associatedtype Item: Identifiable
+    associatedtype FullScreenCoverableItem: Identifiable
     
-    var item: Item? { get }
-    var onDismiss: (() -> Void)? { get }
+    var fullScreenCoverableItem: FullScreenCoverableItem? { get }
+    var onFullScreenCoverableItemDismiss: (() -> Void)? { get }
     
-    func show(item: Item, onDismiss: (() -> Void)?)
-    func dismiss()
+    func showFullScreenCoverableItem(item: FullScreenCoverableItem, onDismiss: (() -> Void)?)
+    func dismissFullScreenCoverableItem()
 }

@@ -39,8 +39,8 @@ struct HomeView: View {
             }
         }
         .fullScreenCover(
-            item: $coordinator.item,
-            onDismiss: coordinator.onDismiss
+            item: $coordinator.fullScreenCoverableItem,
+            onDismiss: coordinator.onFullScreenCoverableItemDismiss
         ) { item in
             switch item {
             case .login:
@@ -53,13 +53,23 @@ struct HomeView: View {
                 ProgressView()
             }
         }
+        .sheet(
+            item: $coordinator.sheetableItem,
+            onDismiss: coordinator.onSheetableItemDismiss,
+        ) { item in
+            switch item {
+            case .addAddress:
+                AddAddressView()
+                    .environmentObject(coordinator)
+            }
+        }
         .task {
             if viewModel.isSignedIn() {
                 await viewModel.refreshToken(onUnauthorized: {
-                    coordinator.show(item: .login)
+                    coordinator.showFullScreenCoverableItem(item: .login)
                 })
             } else {
-                coordinator.show(item: .login)
+                coordinator.showFullScreenCoverableItem(item: .login)
             }
         }
     }

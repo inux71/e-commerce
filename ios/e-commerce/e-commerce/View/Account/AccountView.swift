@@ -23,7 +23,7 @@ struct AccountView: View {
                 }
                 
                 Section("Orders") {
-                    NavigationLink(destination: AddressesView()) {
+                    NavigationLink(destination: AddressesView().environmentObject(homeCoordinator)) {
                         LabeledContent {
                             Text("\(viewModel.addresses)")
                         } label: {
@@ -39,7 +39,7 @@ struct AccountView: View {
                         role: .destructive
                     ) {
                         viewModel.signOut()
-                        homeCoordinator.show(item: .login)
+                        homeCoordinator.showFullScreenCoverableItem(item: .login)
                     }
                     .foregroundStyle(Color(.systemRed))
                 }

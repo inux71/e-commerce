@@ -94,7 +94,7 @@ struct LoginView: View {
                 }
             }
             .onChange(of: viewModel.isSignedIn) {
-                homeCoordinator.dismiss()
+                homeCoordinator.dismissFullScreenCoverableItem()
             }
             .overlay(alignment: .center) {
                 if viewModel.isLoading {
