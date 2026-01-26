@@ -66,4 +66,16 @@ public class AddressService {
 
         addressRepository.save(address);
     }
+
+    @Transactional
+    public void removeAddress(Long id) {
+        Customer customer = getCustomer();
+        Address address = addressRepository.findByIdAndCustomer_Id(id, customer.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Address with id: " + id + " not found"));
+
+        customer.removeAddress(address);
+        address.setCustomer(null);
+
+        addressRepository.delete(address);
+    }
 }

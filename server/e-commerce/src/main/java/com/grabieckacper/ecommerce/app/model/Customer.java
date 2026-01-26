@@ -44,4 +44,8 @@ public class Customer extends User {
     public void addAddress(Address address) {
         addresses.add(address);
     }
+
+    public void removeAddress(Address address) {
+        addresses.remove(address);
+    }
 }

@@ -18,18 +18,11 @@ public class City extends BaseEntity {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @OneToMany(mappedBy = "city")
-    private Set<Address> addresses = new HashSet<>();
-
     public String getName() {
         return name;
     }
 
     public Country getCountry() {
         return country;
-    }
-
-    public Set<Address> getAddresses() {
-        return addresses;
     }
 }
