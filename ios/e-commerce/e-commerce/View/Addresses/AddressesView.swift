@@ -24,13 +24,16 @@ struct AddressesView: View {
     }
     
     var body: some View {
-        List(viewModel.addresses) { address in
-            AddressCard(
-                country: address.country,
-                postalCode: address.postalCode,
-                city: address.city,
-                street: address.street
-            )
+        List {
+            ForEach($viewModel.addresses) { $address in
+                AddressCard(
+                    country: address.country,
+                    postalCode: address.postalCode,
+                    city: address.city,
+                    street: address.street
+                )
+            }
+            .onDelete(perform: viewModel.removeAddress)
         }
         .alert(
             viewModel.errorMessage ?? "",

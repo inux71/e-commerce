@@ -34,4 +34,28 @@ class AddressesViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
+    
+    @MainActor
+    func removeAddress(at offsets: IndexSet) {
+        guard let index: Int = offsets.first else { return }
+        
+        let addressId: Int = addresses[index].id
+        
+        Task {
+            isLoading = true
+            
+            defer {
+                isLoading = false
+            }
+            
+            do {
+                try await networkManager.delete(at: .removeAddress(addressId: addressId))
+                
+                addresses.remove(at: index)
+            } catch {
+                isAlertPresented = true
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
 }

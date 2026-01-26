@@ -20,6 +20,7 @@ enum Endpoint {
     case changePassword
     case addresses
     case createAddress
+    case removeAddress(addressId: Int)
     case countries
     case cities(countryId: Int)
     
@@ -49,6 +50,8 @@ enum Endpoint {
             return "app/address"
         case .createAddress:
             return "app/address"
+        case .removeAddress(let addressId):
+            return "app/address/\(addressId)"
         case .countries:
             return "country"
         case .cities(let countryId):
