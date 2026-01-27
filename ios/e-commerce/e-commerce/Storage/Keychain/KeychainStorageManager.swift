@@ -7,15 +7,15 @@
 
 import Foundation
 
-class KeychainStorageManager: StorageManager {
+class KeychainStorageManager {
     static let shared = KeychainStorageManager()
     
     private init() {}
     
-    func search<T: Decodable>(for key: String, as type: T.Type) throws -> T {
+    func search<T: Decodable>(for key: KeychainKey, as type: T.Type) throws -> T {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: key,
+            kSecAttrAccount as String: key.rawValue,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
@@ -38,12 +38,12 @@ class KeychainStorageManager: StorageManager {
         return try JSONDecoder().decode(T.self, from: data)
     }
     
-    func save<T: Encodable>(for key: String, value: T) throws {
+    func save<T: Encodable>(for key: KeychainKey, value: T) throws {
         let data = try JSONEncoder().encode(value)
         
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: key
+            kSecAttrAccount as String: key.rawValue
         ]
         
         let attributesToUpdate: [String: Any] = [
@@ -58,7 +58,7 @@ class KeychainStorageManager: StorageManager {
         case errSecItemNotFound:
             let addQuery: [String: Any] = [
                 kSecClass as String: kSecClassGenericPassword,
-                kSecAttrAccount as String: key,
+                kSecAttrAccount as String: key.rawValue,
                 kSecValueData as String: data
             ]
             
@@ -72,10 +72,10 @@ class KeychainStorageManager: StorageManager {
         }
     }
     
-    func delete(for key: String) throws {
+    func delete(for key: KeychainKey) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: key
+            kSecAttrAccount as String: key.rawValue
         ]
         
         let status: OSStatus = SecItemDelete(query as CFDictionary)

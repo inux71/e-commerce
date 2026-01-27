@@ -9,6 +9,7 @@ import Foundation
 
 enum HomeFullScreenCoverableItem: String, Identifiable {
     case login
+    case settings
     
     var id: String {
         rawValue

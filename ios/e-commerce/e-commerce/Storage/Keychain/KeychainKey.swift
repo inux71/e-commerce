@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct KeychainKey {
-    static let accessToken: String = "access-token"
+enum KeychainKey: String {
+    case accessToken = "access-token"
 }

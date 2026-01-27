@@ -46,6 +46,9 @@ struct HomeView: View {
             case .login:
                 LoginView()
                     .environmentObject(coordinator)
+            case .settings:
+                SettingsView()
+                    .environmentObject(coordinator)
             }
         }
         .overlay(alignment: .center) {

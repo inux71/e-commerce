@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct e_commerceApp: App {
+    @AppStorage(UserDefaultsKey.darkMode.rawValue) private var darkMode: Bool = false
+    
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .preferredColorScheme(darkMode ? .dark : .light)
         }
     }
 }

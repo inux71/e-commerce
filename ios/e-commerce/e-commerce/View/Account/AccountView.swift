@@ -62,6 +62,11 @@ struct AccountView: View {
             .task {
                 await viewModel.getCustomer()
             }
+            .toolbar {
+                Button("Settings", systemImage: "gear") {
+                    homeCoordinator.showFullScreenCoverableItem(item: .settings)
+                }
+            }
         }
     }
 }

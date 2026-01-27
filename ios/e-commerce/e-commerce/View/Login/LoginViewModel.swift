@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 class LoginViewModel: ObservableObject {
-    private let keychainStorageManager: StorageManager = KeychainStorageManager.shared
+    private let keychainStorageManager = KeychainStorageManager.shared
     private let networkManager: NetworkManager = NetworkManager.shared
     
     @Published var isLoading: Bool = false
