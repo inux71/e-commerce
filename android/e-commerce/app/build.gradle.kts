@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -63,4 +64,13 @@ dependencies {
     kspAndroidTest(libs.dagger.hilt.compiler)
     testImplementation(libs.dagger.hilt.android.testing)
     kspTest(libs.dagger.hilt.compiler)
+
+    // navigation
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.hilt.navigation.compose)
+
+    // serialization
+    implementation(libs.kotlinx.serialization.core)
 }
