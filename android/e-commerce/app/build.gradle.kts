@@ -57,6 +57,10 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    // datastore
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.preferences)
+
     // hilt
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)

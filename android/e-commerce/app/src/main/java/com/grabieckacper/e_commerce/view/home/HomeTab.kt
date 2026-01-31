@@ -1,4 +1,4 @@
-package com.grabieckacper.e_commerce.home
+package com.grabieckacper.e_commerce.view.home
 
 import androidx.annotation.DrawableRes
 import com.grabieckacper.e_commerce.R

@@ -1,4 +1,4 @@
-package com.grabieckacper.e_commerce.home
+package com.grabieckacper.e_commerce.view.home
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
