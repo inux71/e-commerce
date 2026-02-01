@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.grabieckacper.e_commerce.view.auth.AuthNavigationGraph
 import com.grabieckacper.e_commerce.view.home.HomeScreen
 import com.grabieckacper.e_commerce.view.settings.SettingsScreen
 
@@ -22,19 +23,26 @@ fun NavigationGraph(modifier: Modifier = Modifier) {
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = entryProvider {
+            entry<Route.Auth> {
+                AuthNavigationGraph(onSuccessfulSignIn = {
+                    backStack.remove(element = Route.Auth)
+                })
+            }
             entry<Route.Home> {
                 HomeScreen(
                     onCartButtonClick = {},
                     onSettingsButtonClick = {
-                        backStack.add(Route.Settings)
+                        backStack.add(element = Route.Settings)
                     },
-                    onSignOutButtonClick = {}
+                    onSignOutButtonClick = {
+                        backStack.add(element = Route.Auth)
+                    }
                 )
             }
             entry<Route.Settings> {
                 SettingsScreen(
                     onGoBackButtonClick = {
-                        backStack.remove(Route.Settings)
+                        backStack.remove(element = Route.Settings)
                     }
                 )
             }

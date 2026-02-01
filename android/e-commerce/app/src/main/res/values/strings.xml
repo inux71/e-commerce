@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">E-commerce</string>
 
+    <!-- LOGIN SCREEN !-->
+    <string name="login_title">Sign in</string>
+    <string name="login_header">Sign in to your account</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">example@email.com</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="password_label">Password</string>
+    <string name="password_placeholder">password</string>
+    <string name="invalid_password">Password must contains at least 8 characters</string>
+    <string name="login_button">Sign in</string>
+    <string name="no_account_question">Don\'t have an account?</string>
+    <string name="register_button">Sign up</string>
+
     <!-- SETTINGS SCREEN !-->
     <string name="settings_title">Settings</string>
     <string name="dark_theme_label">Dark Theme</string>
