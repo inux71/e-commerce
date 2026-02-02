@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.grabieckacper.e_commerce.navigation.Route
 import com.grabieckacper.e_commerce.view.auth.login.LoginScreen
+import com.grabieckacper.e_commerce.view.auth.register.RegisterScreen
 
 @Composable
 fun AuthNavigationGraph(
@@ -29,7 +30,17 @@ fun AuthNavigationGraph(
                 LoginScreen(
                     onSuccessfulSignIn = onSuccessfulSignIn,
                     onSignUpButtonClick = {
-                        // TODO: navigate to register screen
+                        backStack.add(element = Route.Auth.Register)
+                    }
+                )
+            }
+            entry<Route.Auth.Register> {
+                RegisterScreen(
+                    onSuccessfulSignUp = {
+                        backStack.remove(element = Route.Auth.Register)
+                    },
+                    onSignInButtonClick = {
+                        backStack.remove(element = Route.Auth.Register)
                     }
                 )
             }

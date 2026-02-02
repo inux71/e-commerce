@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">E-commerce</string>
 
-    <!-- LOGIN SCREEN !-->
-    <string name="login_title">Sign in</string>
-    <string name="login_header">Sign in to your account</string>
+    <!-- AUTH !-->
+    <string name="firstname_label">Firstname</string>
+    <string name="firstname_placeholder">Joe</string>
+    <string name="invalid_firstname">Firstname cannot be empty</string>
+    <string name="lastname_label">Lastname</string>
+    <string name="lastname_placeholder">Doe</string>
+    <string name="invalid_lastname">Lastname cannot be empty</string>
     <string name="email_label">Email</string>
     <string name="email_placeholder">example@email.com</string>
     <string name="invalid_email">Invalid email</string>
@@ -11,8 +15,17 @@
     <string name="password_placeholder">password</string>
     <string name="invalid_password">Password must contains at least 8 characters</string>
     <string name="login_button">Sign in</string>
-    <string name="no_account_question">Don\'t have an account?</string>
     <string name="register_button">Sign up</string>
+
+        <!-- LOGIN SCREEN !-->
+        <string name="login_title">Sign in</string>
+        <string name="login_header">Sign in to your account</string>
+        <string name="no_account_question">Don\'t have an account?</string>
+
+        <!-- REGISTER SCREEN !-->
+        <string name="register_title">Sign up</string>
+        <string name="register_header">Create an account</string>
+        <string name="account_question">Already have an account?</string>
 
     <!-- SETTINGS SCREEN !-->
     <string name="settings_title">Settings</string>
