@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface DataStoreRepository {
     suspend fun <T> read(key: Preferences.Key<T>, defaultValue: T): Flow<T>
+    suspend fun <T> remove(key: Preferences.Key<T>)
     suspend fun <T> write(key: Preferences.Key<T>, value: T)
 }

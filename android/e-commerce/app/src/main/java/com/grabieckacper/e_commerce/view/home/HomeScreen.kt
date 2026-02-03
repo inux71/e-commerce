@@ -18,11 +18,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.grabieckacper.e_commerce.R
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    onCartButtonClick: () -> Unit,
+    onSettingsButtonClick: () -> Unit,
+    onSignOutButtonClick: () -> Unit
+) {
+    HomeContent(
+        onCartButtonClick = onCartButtonClick,
+        onSettingsButtonClick = onSettingsButtonClick,
+        onSignOutButtonClick = {
+            viewModel.signOut()
+            onSignOutButtonClick()
+        },
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun HomeContent(
     onCartButtonClick: () -> Unit,
     onSettingsButtonClick: () -> Unit,
     onSignOutButtonClick: () -> Unit
@@ -97,7 +115,7 @@ fun HomeScreen(
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen(
+    HomeContent(
         onCartButtonClick = {},
         onSettingsButtonClick = {},
         onSignOutButtonClick = {}

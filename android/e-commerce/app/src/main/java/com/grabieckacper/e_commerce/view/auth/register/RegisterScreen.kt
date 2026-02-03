@@ -1,6 +1,7 @@
 package com.grabieckacper.e_commerce.view.auth.register
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,12 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -55,6 +58,8 @@ fun RegisterScreen(
     }
 
     RegisterContent(
+        isLoading = state.isLoading,
+        error = state.error,
         firstname = state.firstname,
         onFirstnameChange = viewModel::updateFirstname,
         clearFirstname = viewModel::clearFirstname,
@@ -84,6 +89,8 @@ fun RegisterScreen(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun RegisterContent(
+    isLoading: Boolean,
+    error: TextResource,
     firstname: String,
     onFirstnameChange: (String) -> Unit,
     clearFirstname: () -> Unit,
@@ -111,227 +118,248 @@ private fun RegisterContent(
     val focusManager: FocusManager = LocalFocusManager.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.register_title))
-                }
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
+    LaunchedEffect(key1 = error) {
+        when (error) {
+            is TextResource.Text -> {
+                snackbarHostState.showSnackbar(
+                    message = error.text,
+                    duration = SnackbarDuration.Short
+                )
+            }
+            else -> Unit
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues = paddingValues),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = stringResource(id = R.string.register_header),
-                style = MaterialTheme.typography.titleLarge
-            )
+    }
 
-            OutlinedTextField(
-                value = firstname,
-                onValueChange = onFirstnameChange,
-                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
-                label = {
-                    Text(text = stringResource(id = R.string.firstname_label))
-                },
-                placeholder = {
-                    Text(text = stringResource(id = R.string.firstname_placeholder))
-                },
-                trailingIcon = {
-                    if (firstname.isNotEmpty()) {
-                        IconButton(
-                            onClick = clearFirstname
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.close_24),
-                                contentDescription = null
-                            )
-                        }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(id = R.string.register_title))
                     }
-                },
-                supportingText = {
-                    Text(text = firstnameSupportingText.asString())
-                },
-                isError = firstnameError,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    autoCorrectEnabled = true,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next,
-                    showKeyboardOnFocus = true
-                ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(focusDirection = FocusDirection.Next)
-                }),
-                singleLine = true
-            )
-
-            OutlinedTextField(
-                value = lastname,
-                onValueChange = onLastnameChange,
-                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
-                label = {
-                    Text(text = stringResource(id = R.string.lastname_label))
-                },
-                placeholder = {
-                    Text(text = stringResource(id = R.string.lastname_placeholder))
-                },
-                trailingIcon = {
-                    if (lastname.isNotEmpty()) {
-                        IconButton(
-                            onClick = clearLastname
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.close_24),
-                                contentDescription = null
-                            )
-                        }
-                    }
-                },
-                supportingText = {
-                    Text(text = lastnameSupportingText.asString())
-                },
-                isError = lastnameError,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    autoCorrectEnabled = true,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next,
-                    showKeyboardOnFocus = true
-                ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(focusDirection = FocusDirection.Next)
-                }),
-                singleLine = true
-            )
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = onEmailChange,
-                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
-                label = {
-                    Text(text = stringResource(id = R.string.email_label))
-                },
-                placeholder = {
-                    Text(text = stringResource(id = R.string.email_placeholder))
-                },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.mail_24),
-                        contentDescription = null
-                    )
-                },
-                trailingIcon = {
-                    if (email.isNotEmpty()) {
-                        IconButton(
-                            onClick = clearEmail
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.close_24),
-                                contentDescription = null
-                            )
-                        }
-                    }
-                },
-                supportingText = {
-                    Text(text = emailSupportingText.asString())
-                },
-                isError = emailError,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrectEnabled = false,
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                    showKeyboardOnFocus = true
-                ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(focusDirection = FocusDirection.Next)
-                }),
-                singleLine = true
-            )
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = onPasswordChange,
-                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
-                label = {
-                    Text(text = stringResource(id = R.string.password_label))
-                },
-                placeholder = {
-                    Text(text = stringResource(id = R.string.password_placeholder))
-                },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.password_24),
-                        contentDescription = null
-                    )
-                },
-                trailingIcon = {
-                    if (passwordVisible) {
-                        IconButton(onClick = changePasswordVisibility) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.visibility_24),
-                                contentDescription = null
-                            )
-                        }
-                    } else {
-                        IconButton(onClick = changePasswordVisibility) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.visibility_off_24),
-                                contentDescription = null
-                            )
-                        }
-                    }
-                },
-                supportingText = {
-                    Text(text = passwordSupportingText.asString())
-                },
-                isError = passwordError,
-                visualTransformation = if (passwordVisible) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
-                },
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrectEnabled = false,
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done,
-                    showKeyboardOnFocus = true
-                ),
-                keyboardActions = KeyboardActions(onDone = {
-                    focusManager.clearFocus()
-                }),
-                singleLine = true
-            )
-
-            Button(
-                onClick = onSignUpButtonClick,
-                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
-                enabled = !(firstnameError || lastnameError || emailError || passwordError)
-            ) {
-                Text(text = stringResource(id = R.string.register_button))
+                )
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
             }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = paddingValues),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.account_question))
+                Text(
+                    text = stringResource(id = R.string.register_header),
+                    style = MaterialTheme.typography.titleLarge
+                )
 
-                TextButton(onClick = onSignInButtonClick) {
-                    Text(text = stringResource(id = R.string.login_button))
+                OutlinedTextField(
+                    value = firstname,
+                    onValueChange = onFirstnameChange,
+                    modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+                    label = {
+                        Text(text = stringResource(id = R.string.firstname_label))
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.firstname_placeholder))
+                    },
+                    trailingIcon = {
+                        if (firstname.isNotEmpty()) {
+                            IconButton(
+                                onClick = clearFirstname
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.close_24),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    },
+                    supportingText = {
+                        Text(text = firstnameSupportingText.asString())
+                    },
+                    isError = firstnameError,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        autoCorrectEnabled = true,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next,
+                        showKeyboardOnFocus = true
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(focusDirection = FocusDirection.Next)
+                    }),
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    value = lastname,
+                    onValueChange = onLastnameChange,
+                    modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+                    label = {
+                        Text(text = stringResource(id = R.string.lastname_label))
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.lastname_placeholder))
+                    },
+                    trailingIcon = {
+                        if (lastname.isNotEmpty()) {
+                            IconButton(
+                                onClick = clearLastname
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.close_24),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    },
+                    supportingText = {
+                        Text(text = lastnameSupportingText.asString())
+                    },
+                    isError = lastnameError,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        autoCorrectEnabled = true,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next,
+                        showKeyboardOnFocus = true
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(focusDirection = FocusDirection.Next)
+                    }),
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = onEmailChange,
+                    modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+                    label = {
+                        Text(text = stringResource(id = R.string.email_label))
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.email_placeholder))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.mail_24),
+                            contentDescription = null
+                        )
+                    },
+                    trailingIcon = {
+                        if (email.isNotEmpty()) {
+                            IconButton(
+                                onClick = clearEmail
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.close_24),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    },
+                    supportingText = {
+                        Text(text = emailSupportingText.asString())
+                    },
+                    isError = emailError,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrectEnabled = false,
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next,
+                        showKeyboardOnFocus = true
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(focusDirection = FocusDirection.Next)
+                    }),
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = onPasswordChange,
+                    modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+                    label = {
+                        Text(text = stringResource(id = R.string.password_label))
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.password_placeholder))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.password_24),
+                            contentDescription = null
+                        )
+                    },
+                    trailingIcon = {
+                        if (passwordVisible) {
+                            IconButton(onClick = changePasswordVisibility) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.visibility_24),
+                                    contentDescription = null
+                                )
+                            }
+                        } else {
+                            IconButton(onClick = changePasswordVisibility) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.visibility_off_24),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    },
+                    supportingText = {
+                        Text(text = passwordSupportingText.asString())
+                    },
+                    isError = passwordError,
+                    visualTransformation = if (passwordVisible) {
+                        VisualTransformation.None
+                    } else {
+                        PasswordVisualTransformation()
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrectEnabled = false,
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                        showKeyboardOnFocus = true
+                    ),
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
+                    }),
+                    singleLine = true
+                )
+
+                Button(
+                    onClick = onSignUpButtonClick,
+                    modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+                    enabled = !(firstnameError || lastnameError || emailError || passwordError)
+                ) {
+                    Text(text = stringResource(id = R.string.register_button))
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = stringResource(id = R.string.account_question))
+
+                    TextButton(onClick = onSignInButtonClick) {
+                        Text(text = stringResource(id = R.string.login_button))
+                    }
                 }
             }
+        }
+
+        if (isLoading) {
+            CircularProgressIndicator()
         }
     }
 }
@@ -340,6 +368,8 @@ private fun RegisterContent(
 @Preview
 fun RegisterScreenPreview() {
     RegisterContent(
+        isLoading = false,
+        error = TextResource.Empty,
         firstname = "",
         onFirstnameChange = {},
         clearFirstname = {},

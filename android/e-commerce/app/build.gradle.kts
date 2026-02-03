@@ -69,6 +69,13 @@ dependencies {
     testImplementation(libs.dagger.hilt.android.testing)
     kspTest(libs.dagger.hilt.compiler)
 
+    // ktor
+    implementation(libs.ktor.client.auth)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
     // navigation
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)

@@ -1,17 +1,33 @@
 package com.grabieckacper.e_commerce.view.auth.login
 
+import android.util.Log
 import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.grabieckacper.e_commerce.R
 import com.grabieckacper.e_commerce.common.TextResource
+import com.grabieckacper.e_commerce.datastore.DataStoreKey
+import com.grabieckacper.e_commerce.model.Token
+import com.grabieckacper.e_commerce.network.request.LoginRequest
+import com.grabieckacper.e_commerce.repository.DataStoreRepository
+import com.grabieckacper.e_commerce.service.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.RedirectResponseException
+import io.ktor.client.plugins.ServerResponseException
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val authService: AuthService,
+    private val dataStoreRepository: DataStoreRepository
+) : ViewModel() {
     data class LoginState(
+        val isLoading: Boolean = false,
+        val error: TextResource = TextResource.Empty,
         val email: String = "",
         val emailSupportingText: TextResource = TextResource.Empty,
         val emailError: Boolean = false,
@@ -79,14 +95,54 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     }
 
     fun signIn() {
-        validateEmail()
-        validatePassword()
+        viewModelScope.launch {
+            validateEmail()
+            validatePassword()
 
-        if (_state.value.emailError || _state.value.passwordError) {
-            return
-        } else {
-            // TODO: sign in logic
-            _state.value = _state.value.copy(signedIn = true)
+            if (_state.value.emailError || _state.value.passwordError) {
+                return@launch
+            }
+
+            try {
+                _state.value = _state.value.copy(isLoading = true)
+
+                val loginRequest = LoginRequest(
+                    email = _state.value.email,
+                    password = _state.value.password
+                )
+
+                val token: Token = authService.signIn(loginRequest = loginRequest)
+
+                dataStoreRepository.write(key = DataStoreKey.accessToken, value = token.token)
+
+                _state.value = _state.value.copy(signedIn = true)
+            } catch (e: RedirectResponseException) {
+                Log.e("[RedirectResponseException]", e.message)
+
+                _state.value = _state.value.copy(
+                    error = TextResource.Text(text = e.message)
+                )
+            } catch (e: ClientRequestException) {
+                Log.e("[ClientRequestException]", e.message)
+
+                _state.value = _state.value.copy(
+                    error = TextResource.Text(text = e.message)
+                )
+            } catch (e: ServerResponseException) {
+                Log.e("[ServerResponseException]", e.message)
+
+                _state.value = _state.value.copy(
+                    error = TextResource.Text(text = e.message)
+                )
+            } catch (e: Exception) {
+                Log.e("[Exception]", e.message ?: "")
+
+                _state.value = _state.value.copy(
+                    error = TextResource.Text(text = e.message ?: "")
+                )
+            } finally {
+                _state.value = _state.value.copy(isLoading = false)
+            }
         }
     }
 }

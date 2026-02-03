@@ -12,11 +12,14 @@ sealed class TextResource {
         vararg val args: Any
     ) : TextResource()
 
+    data class Text(val text: String) : TextResource()
+
     @Composable
     fun asString(): String {
         return when(this) {
             is Empty -> ""
             is StringResource -> stringResource(id = id, *args)
+            is Text -> text
         }
     }
 }

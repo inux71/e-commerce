@@ -20,6 +20,12 @@ class DataStoreRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun <T> remove(key: Preferences.Key<T>) {
+        dataStore.edit { preferences ->
+            preferences.remove(key = key)
+        }
+    }
+
     override suspend fun <T> write(
         key: Preferences.Key<T>,
         value: T

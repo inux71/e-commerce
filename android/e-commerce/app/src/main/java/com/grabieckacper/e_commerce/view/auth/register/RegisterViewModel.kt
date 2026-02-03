@@ -1,17 +1,27 @@
 package com.grabieckacper.e_commerce.view.auth.register
 
+import android.util.Log
 import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.grabieckacper.e_commerce.R
 import com.grabieckacper.e_commerce.common.TextResource
+import com.grabieckacper.e_commerce.network.request.RegisterRequest
+import com.grabieckacper.e_commerce.service.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.RedirectResponseException
+import io.ktor.client.plugins.ServerResponseException
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor() : ViewModel() {
+class RegisterViewModel @Inject constructor(private val authService: AuthService) : ViewModel() {
     data class RegisterState(
+        val isLoading: Boolean = false,
+        val error: TextResource = TextResource.Empty,
         val firstname: String = "",
         val firstnameSupportingText: TextResource = TextResource.Empty,
         val firstnameError: Boolean = false,
@@ -145,21 +155,61 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
     }
 
     fun signUp() {
-        validateFirstname()
-        validateLastname()
-        validateEmail()
-        validatePassword()
+        viewModelScope.launch {
+            validateFirstname()
+            validateLastname()
+            validateEmail()
+            validatePassword()
 
-        if (
-            _state.value.firstnameError ||
-            _state.value.lastnameError ||
-            _state.value.emailError ||
-            _state.value.passwordError
-        ) {
-            return
-        } else {
-            // TODO: sign up logic
-            _state.value = _state.value.copy(signedUp = true)
+            if (
+                _state.value.firstnameError ||
+                _state.value.lastnameError ||
+                _state.value.emailError ||
+                _state.value.passwordError
+            ) {
+                return@launch
+            }
+
+            try {
+                _state.value = _state.value.copy(isLoading = true)
+
+                val registerRequest = RegisterRequest(
+                    email = _state.value.email,
+                    password = _state.value.password,
+                    firstname = _state.value.firstname,
+                    lastname = _state.value.lastname
+                )
+
+                authService.signUp(registerRequest = registerRequest)
+
+                _state.value = _state.value.copy(signedUp = true)
+            } catch (e: RedirectResponseException) {
+                Log.e("[RedirectResponseException]", e.message)
+
+                _state.value = _state.value.copy(
+                    error = TextResource.Text(text = e.message)
+                )
+            } catch (e: ClientRequestException) {
+                Log.e("[ClientRequestException]", e.message)
+
+                _state.value = _state.value.copy(
+                    error = TextResource.Text(text = e.message)
+                )
+            } catch (e: ServerResponseException) {
+                Log.e("[ServerResponseException]", e.message)
+
+                _state.value = _state.value.copy(
+                    error = TextResource.Text(text = e.message)
+                )
+            } catch (e: Exception) {
+                Log.e("[Exception]", e.message ?: "")
+
+                _state.value = _state.value.copy(
+                    error = TextResource.Text(text = e.message ?: "")
+                )
+            } finally {
+                _state.value = _state.value.copy(isLoading = false)
+            }
         }
     }
 }
